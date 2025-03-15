@@ -1,0 +1,49 @@
+# Base image
+FROM node:22.11.0-alpine AS base
+
+# Install specific yarn version
+RUN npm install -g yarn@1.22.22 --force
+
+# Dependencies stage
+FROM base AS dependencies
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install
+
+# Build stage
+FROM base AS build
+WORKDIR /app
+
+# Copy dependencies from previous stage
+COPY --from=dependencies /app/node_modules ./node_modules
+COPY . .
+
+# Set environment variables for build
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV BASE_URL=${BASE_URL}
+
+# Build the application
+RUN yarn build
+
+# Production stage
+FROM base AS runner
+WORKDIR /app
+
+# Set environment variables for runtime
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV HOSTNAME="0.0.0.0"
+
+# Copy necessary files from build stage
+COPY --from=build /app/public ./public
+COPY --from=build /app/package.json ./package.json
+
+# For standalone output mode
+RUN mkdir -p .next/standalone .next/static
+
+# Copy the standalone output and static files
+COPY --from=build /app/.next/standalone ./
+COPY --from=build /app/.next/static ./.next/static
+
+# Start the application
+CMD ["node", "server.js"]

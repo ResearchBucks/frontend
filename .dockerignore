@@ -1,0 +1,26 @@
+# Version Control
+.git
+.gitignore
+
+# Build & Dependencies
+.next
+node_modules
+Dockerfile.*
+out
+
+# Environment Variables
+.env*
+
+# IDE
+.idea
+.vscode
+
+# Logs & Documentation
+*.log
+README.md
+
+# System Files
+.DS_Store
+
+# Scripts
+scripts
