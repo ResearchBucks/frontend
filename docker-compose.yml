@@ -1,0 +1,29 @@
+services:
+  # Development service
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/src
+      - /src/node_modules
+    env_file:
+      - .env.local
+    environment:
+      - NODE_ENV=development
+    profiles:
+      - dev
+
+  # Production service
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - "8080:3000"
+    environment:
+      - NODE_ENV=production
+    profiles:
+      - prod
