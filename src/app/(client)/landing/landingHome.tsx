@@ -5,7 +5,6 @@ import { homeSectionImgOne, homeSectionImgTwo } from '@/assests/assests';
 export default function LandingHomePage() {
   return (
     <>
-      <section id="home" className="min-h-screen bg-[var(--main-light)] justify-center px-16 max-w-screen flex">
         <div className="grid grid-cols-2 w-full max-w-screen px-6">
           {/* Left Column */}
           <div className="flex flex-col gap-3 justify-center text-[var(--main-text-light)]">
@@ -22,6 +21,7 @@ export default function LandingHomePage() {
           <div className="flex justify-center ">
             <div className='flex  items-center justify-center w-full relative '>
             <div className="absolute right-0 top-6">
+              {/* Background Image (homeSectionImgOne) */}
               <Image
                 src={homeSectionImgOne}
                 alt="homeSectionImgOne"
@@ -41,27 +41,9 @@ export default function LandingHomePage() {
                 className="object-cover"
               />
             </div>
-            </div>
-            {/* Background Image (homeSectionImgOne) */}
-            
-          </div>
+          </div>    
         </div>
-      </section>
-
-      <section id="respondents" className="py-20">
-        <h2>Respondents Section</h2>
-        {/* Content for Respondents section */}
-      </section>
-
-      <section id="researcher" className="py-20">
-        <h2>Researcher Section</h2>
-        {/* Content for Researcher section */}
-      </section>
-
-      <section id="aboutus" className="py-20">
-        <h2>About Us Section</h2>
-        {/* Content for About Us section */}
-      </section>
+      </div>
     </>
   );
 }
