@@ -1,7 +1,11 @@
+import SurveyCard from "@/components/landing/surveyCard";
+
 export default function LandingSurveyPage(){
     return(
-    <>
-        <h1>he</h1>
-    </>
+    <div className="flex flex-col justify-center items-center">
+        <div className="grid grid-cols-3 w-full">
+            
+        </div>
+    </div>
     );
 }

@@ -3,3 +3,6 @@ export const logo = '/ResearchBucks.png';
 export const homeSectionImgOne= "/landingpageImages/homeSectionImgOne.png";
 export const homeSectionImgTwo= "/landingpageImages/homeSectionImgTwo.png";
 export const homeRespondent= "/landingpageImages/homeRespondents.png";
+export const surveySignup= "/landingpageImages/signup.png";
+export const homeAnswer=  "/landingpageImages/answer.pnvg";
+export const getPaid= "/landingpageImages/getPaid.png";
