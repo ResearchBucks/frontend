@@ -1,6 +1,6 @@
-import Container from "@/components/layout/container";
 import LandingHomePage from './landingHome'
 import LandingRespondentPage from "./landingRespondentPage";
+import LandingSurveyPage from './landingSurvey';
 
 export default function LandingPage() {
   return (
@@ -10,7 +10,10 @@ export default function LandingPage() {
      </section>
      <section id="respondents" className="min-h-screen bg-[var(--main-text-light)] justify-center px-16 max-w-screen flex">
         <LandingRespondentPage />
-     </section>
+     </section> 
+     <section id="surveys" className="min-h-screen bg-[var(--main-text-light)] justify-center px-16 max-w-screen flex">
+        <LandingSurveyPage />
+     </section> 
     </>
       
   );
