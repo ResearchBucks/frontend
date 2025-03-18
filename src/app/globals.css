@@ -48,10 +48,10 @@
   --radius: 0.625rem;
 
   --background-light: #EBF1EF;
-  --main-light: #159494,
-  --button-light: #94345C,
-  --main-text-light: #FFFFFF,
-  --second-text-light: #1E1E1E,
+  --main-light: #159494;
+  --button-light: #94345C;
+  --main-text-light: #FFFFFF;
+  --second-text-light: #1E1E1E;
   
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

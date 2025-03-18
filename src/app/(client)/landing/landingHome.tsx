@@ -2,11 +2,23 @@
 
 export default function LandingHomePage() {
   return (
-    <div className="">
-     <div>
-      <section id="home" className="py-20">
-        <h2>Home Section</h2>
-        {/* Content for Home section */}
+     <>
+      <section id="home" className="min-h-screen bg-[var(--main-light)] justify-center flex ">
+          <div className="grid grid-cols-2 w-full max-w-screen-lg px-4">
+            <div className="flex flex-col gap-2 justify-center text-[var(--main-text-light)]">
+              <span className="text-5xl font-bold">Effortless Surveys, Rewarding Results</span>
+              <p className="text-lg">Create, Share and Reward</p>
+              <div className="flex flex-row">
+
+              </div>
+            </div>
+
+            {/* Second part can go here */}
+            <div className="flex flex-col justify-center items-center text-center">
+              {/* You can add any content here */}
+              <span className="text-xl">Another Part</span>
+            </div>
+          </div>
       </section>
       
       <section id="respondents" className="py-20">
@@ -23,7 +35,6 @@ export default function LandingHomePage() {
         <h2>About Us Section</h2>
         {/* Content for About Us section */}
       </section>
-    </div>
-    </div>
+    </>
   );
 }
