@@ -7,7 +7,7 @@ export const navMenues: IMenueItem[] = [
   },
   {
     title: "Respondents",
-    href: "/docs",
+    href: "#respondents",
   },
   {
     title: "Researcher",

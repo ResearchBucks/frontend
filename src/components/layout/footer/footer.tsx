@@ -35,7 +35,7 @@ export default function Footer({
               </div>
             </div>
           </div>
-          <nav className="flex flex-col md:flex-row gap-4 md:gap-20 text-center md:text-left">
+          {/* <nav className="flex flex-col md:flex-row gap-4 md:gap-20 text-center md:text-left">
             {footerRoutes.map((menu) => (
               <div key={"groupTitle" in menu ? menu.groupTitle : menu.title}>
                 {"items" in menu ? (
@@ -54,7 +54,7 @@ export default function Footer({
                 )}
               </div>
             ))}
-          </nav>
+          </nav> */}
         </div>
         <CopyRigtBar />
       </Container>

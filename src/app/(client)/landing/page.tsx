@@ -1,9 +1,10 @@
 import Container from "@/components/layout/container";
+import LandingHomePage from './landingHome'
 
 export default function LandingPage() {
   return (
     <Container>
-      <h1>landing Page</h1>
+      <LandingHomePage />
     </Container>
   );
 }
