@@ -17,16 +17,16 @@ export default function SurveyCard({surveyCardName}:SurveyCardProps){
         case "answer":
                 imgSrc = homeAnswer;
                 title = "Answer";
-                description ="oin in seconds and start making an impact with your opinions!";
+                description ="Complete surveys that match your interests and expertise.";
                 break;
         case "getpaid":
                 imgSrc = getPaid;
                 title = "Get Paid";
-                description ="oin in seconds and start making an impact with your opinions!";
+                description ="Earn rewards for every survey you complete quick and easy!";
                 break;
     };
     return(
-        <div className="rounded-md shadow-lg bg-[var(--main-text-light)] p-12 max-h flex flex-col gap-4 justify-center items-center text-center">
+        <div className="rounded-md shadow-lg bg-[var(--main-text-light)] hover:bg-[var(--main-light)]/20 cursor-pointer p-12 max-h flex flex-col gap-4 justify-center items-center text-center">
             <Image
                 src={imgSrc}
                 alt= {title}
