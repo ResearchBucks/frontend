@@ -1,15 +1,16 @@
-
+import { Button } from '@/components/ui/button';
 
 export default function LandingHomePage() {
   return (
      <>
       <section id="home" className="min-h-screen bg-[var(--main-light)] justify-center flex ">
           <div className="grid grid-cols-2 w-full max-w-screen-lg px-4">
-            <div className="flex flex-col gap-2 justify-center text-[var(--main-text-light)]">
+            <div className="flex flex-col gap-3 justify-center text-[var(--main-text-light)]">
               <span className="text-5xl font-bold">Effortless Surveys, Rewarding Results</span>
-              <p className="text-lg">Create, Share and Reward</p>
-              <div className="flex flex-row">
-
+              <p className="text-sm">Create, Share and Reward</p>
+              <div className="flex flex-row py-4  gap-4">
+                <Button variant="common" size="common" name="Login"/>
+                <Button variant="common" size="common" name="Signup"/>
               </div>
             </div>
 
