@@ -22,6 +22,7 @@ import { BrandType } from "@/data/brand";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import {logo} from '@/assests/assests';
 
 export function MobileNavMenu({
   navBarRoutes,
@@ -36,14 +37,14 @@ export function MobileNavMenu({
           <Menu />
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-sm p-4">
+      <SheetContent className="w-full sm:max-w-sm p-4 bg-[var(--background-light)]/70">
         <SheetHeader>
           <SheetTitle className="flex justify-center py-5">
             <SheetClose asChild>
               <Link href="/">
                 <Image
-                  src={brand.logo}
-                  alt={`${brand.name} Logo`}
+                  src={logo}
+                  alt={"ResearchBucks"}
                   width={100}
                   height={100}
                 />
@@ -74,7 +75,7 @@ export function MobileNavMenu({
                             <Link
                               href={item.href}
                               className={cn(
-                                "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors",
+                                "block select-none space-y-1  rounded-md p-3 leading-none no-underline outline-none transition-colors",
                                 pathname === item.href
                                   ? "bg-accent text-accent-foreground"
                                   : "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
