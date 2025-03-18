@@ -1,37 +1,63 @@
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+import { homeSectionImgOne, homeSectionImgTwo } from '@/assests/assests';
 
 export default function LandingHomePage() {
   return (
-     <>
-      <section id="home" className="min-h-screen bg-[var(--main-light)] justify-center flex ">
-          <div className="grid grid-cols-2 w-full max-w-screen-lg px-4">
-            <div className="flex flex-col gap-3 justify-center text-[var(--main-text-light)]">
-              <span className="text-5xl font-bold">Effortless Surveys, Rewarding Results</span>
-              <p className="text-sm">Create, Share and Reward</p>
-              <div className="flex flex-row py-4  gap-4">
-                <Button variant="common" size="common" name="Login"/>
-                <Button variant="common" size="common" name="Signup"/>
-              </div>
-            </div>
-
-            {/* Second part can go here */}
-            <div className="flex flex-col justify-center items-center text-center">
-              {/* You can add any content here */}
-              <span className="text-xl">Another Part</span>
+    <>
+      <section id="home" className="min-h-screen bg-[var(--main-light)] justify-center px-16 max-w-screen flex">
+        <div className="grid grid-cols-2 w-full max-w-screen px-6">
+          {/* Left Column */}
+          <div className="flex flex-col gap-3 justify-center text-[var(--main-text-light)]">
+            <span className="text-5xl font-bold">Effortless Surveys,</span>
+            <span className="text-5xl font-bold">Rewarding Results</span>
+            <p className="text-sm">Create, Share and Reward</p>
+            <div className="flex flex-row py-4 gap-4">
+              <Button variant="common" size="common" name="Login" />
+              <Button variant="common" size="common" name="Signup" />
             </div>
           </div>
+
+          {/* Right Column */}
+          <div className="flex justify-center ">
+            <div className='flex  items-center justify-center w-full relative '>
+            <div className="absolute right-0 top-6">
+              <Image
+                src={homeSectionImgOne}
+                alt="homeSectionImgOne"
+                width={250}
+                height={250}
+                className=""
+              />
+            </div>
+
+            {/* Foreground Image (homeSectionImgTwo) */}
+            <div className=" absolute left-4 z-10">
+              <Image
+                src={homeSectionImgTwo}
+                alt="homeSectionImgTwo"
+                width={450}
+                height={450}
+                className="object-cover"
+              />
+            </div>
+            </div>
+            {/* Background Image (homeSectionImgOne) */}
+            
+          </div>
+        </div>
       </section>
-      
+
       <section id="respondents" className="py-20">
         <h2>Respondents Section</h2>
         {/* Content for Respondents section */}
       </section>
-      
+
       <section id="researcher" className="py-20">
         <h2>Researcher Section</h2>
         {/* Content for Researcher section */}
       </section>
-      
+
       <section id="aboutus" className="py-20">
         <h2>About Us Section</h2>
         {/* Content for About Us section */}
