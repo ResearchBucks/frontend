@@ -27,8 +27,6 @@ export default function LandingAboutPage(){
                   className=" "
                 />
               </div>
-              
-
             </div>     
     )
 }
