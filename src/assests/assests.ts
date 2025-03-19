@@ -6,3 +6,4 @@ export const homeRespondent= "/landingpageImages/homeRespondents.png";
 export const surveySignup= "/landingpageImages/signup.png";
 export const homeAnswer=  "/landingpageImages/answer.png";
 export const getPaid= "/landingpageImages/getPaid.png";
+export const homeResearcher= '/landingpageImages/homeResearcher.png';
