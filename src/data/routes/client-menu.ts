@@ -19,7 +19,7 @@ export const navMenues: IMenueItem[] = [
   },
   {
     title: "AboutUs",
-    href: "/docs",
+    href: "#aboutus",
   },
   {
     title: "Login",

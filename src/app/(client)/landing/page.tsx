@@ -2,6 +2,7 @@ import LandingHomePage from './landingHome'
 import LandingRespondentPage from "./landingRespondentPage";
 import LandingSurveyPage from './landingSurvey';
 import LandingResearcher from './landingResearcher';
+import LandingAboutPage from './landingAbout';
 
 export default function LandingPage() {
   return (
@@ -17,6 +18,9 @@ export default function LandingPage() {
      </section> 
      <section id="researcher" className="min-h-screen bg-[var(--main-text-light)] justify-center px-16 max-w-screen flex">
         <LandingResearcher />
+     </section> 
+     <section id="aboutus" className="min-h-screen bg-[var(--background-light)] justify-center px-16 max-w-screen flex">
+        <LandingAboutPage />
      </section> 
     </>
       
