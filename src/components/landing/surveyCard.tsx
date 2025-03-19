@@ -26,7 +26,7 @@ export default function SurveyCard({surveyCardName}:SurveyCardProps){
                 break;
     };
     return(
-        <div className="rounded-md shadow-lg bg-[var(--main-text-light)] hover:bg-[var(--main-light)]/20 cursor-pointer p-12 max-h flex flex-col gap-4 justify-center items-center text-center">
+        <div className="rounded-md shadow-lg bg-[var(--main-text-light)] hover:bg-[var(--main-light)]/20 hover:-translate-y-4 transform transition-transform duration-300 ease-in-out cursor-pointer p-12 max-h flex flex-col gap-4 justify-center items-center text-center">
             <Image
                 src={imgSrc}
                 alt= {title}
