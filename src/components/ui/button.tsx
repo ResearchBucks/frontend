@@ -60,7 +60,9 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     >
-      {name}
+      {props.children}
+      {name && <span>{name}</span>}
+      {/* {name} */}
     </Comp>
   )
 }

@@ -22,7 +22,7 @@ export default function NavBar({
       if (window.scrollY > navBarHeight) {
         if (window.scrollY > lastScrollY) {
           // if scroll down hide the navbar
-          setIsVisible(false);
+          setIsVisible(true);
         } else {
           // if scroll up show the navbar
           setIsVisible(true);
@@ -48,7 +48,7 @@ export default function NavBar({
 
   return (
     <header
-      className={`py-3 border-b-2 sticky top-0 bg-[var(--background-light)] transition-transform duration-300 ${
+      className={`py-3 border-b-2 sticky z-50 top-0 bg-[var(--background-light)] transition-transform duration-300 ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
