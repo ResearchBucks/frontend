@@ -62,7 +62,6 @@ function Button({
     >
       {props.children}
       {name && <span>{name}</span>}
-      {/* {name} */}
     </Comp>
   )
 }

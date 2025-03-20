@@ -3,15 +3,15 @@ import { homeRespondent } from "@/assests/assests";
 
 export default function LandingRespondentPage() {
   return (
-    <div className="grid grid-cols-2 gap-8 w-full max-w-screen px-6">
+    <div className="md:grid md:grid-cols-2 sm:flex sm:flex-col-reverse sm:py-6 md:py-0 gap-8 w-full max-w-screen px-6">
       {/* Image Container */}
-      <div className="flex justify-center items-center relative "> 
+      <div className="flex flex-shrink-0 justify-center items-center relative "> 
         <Image
           src={homeRespondent}
           alt="homeRespondent"
           width={550}
           height={550}
-          className=" "
+          className="md:w-[500px] md:h-400px] "
         />
       </div>
       

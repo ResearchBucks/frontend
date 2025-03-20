@@ -13,7 +13,7 @@ export default function LandingPage() {
      <section id="respondents" className="min-h-screen bg-[var(--main-text-light)] justify-center px-16 max-w-screen flex">
         <LandingRespondentPage />
      </section> 
-     <section id="surveys" className="min-h-screen bg-[var(--background-light)] justify-center px-16 max-w-screen flex">
+     <section id="surveys" className="min-h-screen bg-[var(--background-light)] justify-center md:px-16 sm:px-12 px-16 max-w-screen flex">
         <LandingSurveyPage />
      </section> 
      <section id="researcher" className="min-h-screen bg-[var(--main-text-light)] justify-center px-16 max-w-screen flex">

@@ -14,7 +14,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { IMenueItem } from "@/types/navigation";
+import { IMenueItem } from "@/types/navigation"; 
 
 export function DesktopNavMenu({ navBarRoutes }: Readonly<{ navBarRoutes: IMenueItem[] }>)  {
   const filteredNavMenues = navBarRoutes;

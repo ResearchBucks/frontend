@@ -5,9 +5,9 @@ import { homeSectionImgOne, homeSectionImgTwo } from '@/assests/assests';
 export default function LandingHomePage() {
   return (
     <>
-        <div className="grid grid-cols-2 w-full max-w-screen px-6">
+        <div className="grid md:grid-cols-2 sm:grid-cols-1 w-full max-w-screen px-6">
           {/* Left Column */}
-          <div className="flex flex-col gap-3 justify-center text-[var(--main-text-light)]">
+          <div className="flex flex-col sm:gap-3 gap-4 justify-center text-[var(--main-text-light)]">
             <span className="text-5xl font-bold">Effortless Surveys,</span>
             <span className="text-5xl font-bold">Rewarding Results</span>
             <p className="text-sm">Create, Share and Reward</p>
@@ -18,7 +18,7 @@ export default function LandingHomePage() {
           </div>
 
           {/* Right Column */}
-          <div className="flex justify-center ">
+          <div className="hidden md:flex justify-center ">
             <div className='flex  items-center justify-center w-full relative '>
             <div className="absolute right-0 top-6">
               {/* Background Image (homeSectionImgOne) */}
@@ -27,7 +27,7 @@ export default function LandingHomePage() {
                 alt="homeSectionImgOne"
                 width={250}
                 height={250}
-                className=""
+                className="md:w-[200px] lg:w-[250px]"
               />
             </div>
 
@@ -38,7 +38,7 @@ export default function LandingHomePage() {
                 alt="homeSectionImgTwo"
                 width={450}
                 height={450}
-                className="object-cover"
+                className="object-cover md:w-[300px] lg:w-[450px]"
               />
             </div>
           </div>    
