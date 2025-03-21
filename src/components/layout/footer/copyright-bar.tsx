@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function CopyRigtBar() {
   return (
-    <div className="text-center text-foreground py-4 text-xs flex flex-col-reverse gap-3 md:flex-row justify-between">
+    <div className="text-center py-4 text-xs flex flex-col-reverse gap-3 md:flex-row justify-between text-[var(--main-text-light)]">
       <p>
         &copy; {new Date().getFullYear()}{" "}
         <Link href={DevelopedBy.url} target="_blank" rel="noreferrer">

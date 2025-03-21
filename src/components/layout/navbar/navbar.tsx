@@ -7,6 +7,7 @@ import { BrandType } from "@/data/brand";
 import Link from "next/link";
 import { IMenueItem } from "@/types/navigation";
 import Container from "../container";
+import {logo} from '@/assests/assests';
 
 export default function NavBar({
   navBarRoutes,
@@ -21,7 +22,7 @@ export default function NavBar({
       if (window.scrollY > navBarHeight) {
         if (window.scrollY > lastScrollY) {
           // if scroll down hide the navbar
-          setIsVisible(false);
+          setIsVisible(true);
         } else {
           // if scroll up show the navbar
           setIsVisible(true);
@@ -47,7 +48,7 @@ export default function NavBar({
 
   return (
     <header
-      className={`py-3 border-b-2 sticky top-0 bg-background transition-transform duration-300 ${
+      className={`py-3 border-b-2 sticky z-50 top-0 bg-[var(--background-light)] transition-transform duration-300 ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
@@ -55,10 +56,10 @@ export default function NavBar({
         <div className="flex justify-between">
           <Link href="/">
             <Image
-              src={brand.logo}
-              alt={`${brand.name} Logo`}
-              width={100}
-              height={100}
+              src={logo}
+              alt= "ResearchBucks"
+              width={150}
+              height={150}
             />
           </Link>
           <nav className="flex items-center">

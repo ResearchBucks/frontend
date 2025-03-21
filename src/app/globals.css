@@ -46,6 +46,13 @@
 
 :root {
   --radius: 0.625rem;
+
+  --background-light: #EBF1EF;
+  --main-light: #159494;
+  --button-light: #94345C;
+  --main-text-light: #FFFFFF;
+  --second-text-light: #1E1E1E;
+  
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -77,6 +84,11 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+}
+
+.light {
+  --background: var(--background-light);
+  --foreground: var(--foreground-light);
 }
 
 .dark {
