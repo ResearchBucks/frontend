@@ -13,6 +13,7 @@ export function LoginForm({
     <form className={cn("flex flex-col gap-8", className)} {...props}>
       <h1 className="text-2xl text-center  font-bold">Login</h1>
 
+      {/* the input fields and the login button */}
       <div className="grid gap-4 ">
         <div className="grid gap-4">
           <Input id="email" type="email" placeholder="username" required icon={<img src={userloginImg} alt="user icon" className="w-5 h-6" />}/>
