@@ -16,8 +16,8 @@ export const BRAND = {
 } as const;
 
 export const DevelopedBy = {
-  name: "IamDeveloper",
-  url: "https://www.iamdeveloper.com",
+  name: "ResearchBucks",
+  url: "/",
   logo: "https://www.iamdeveloper.com/images/logo.svg",
 } as const;
 
