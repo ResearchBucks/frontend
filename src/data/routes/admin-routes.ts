@@ -3,16 +3,12 @@ import { getAvailableRoutesForRole } from "@/lib/role/functions";
 import { TlinkTarget } from "@/types/components-props";
 import {
   type LucideIcon as TLucideIcon,
-  SquareTerminal,
-  HistoryIcon,
-  ListStartIcon,
-  BookOpen,
-  Frame,
-  Folder,
-  Forward,
-  Trash2,
-  PieChart,
+  ChartColumn,
+  CircleUserRound,
   LayoutDashboard,
+  Medal,
+  NotebookPen,
+  NotepadText,
   Users,
 } from "lucide-react";
 
@@ -40,148 +36,51 @@ const navMain: IMenueItem[] = [
     title: "Dashboard",
     url: "/admin/dashboard",
     icon: LayoutDashboard,
-    items: [
-      {
-        title: "Overview",
-        url: "/admin/dashboard/overview",
-        icon: HistoryIcon,
-      },
-      {
-        title: "Activity",
-        url: "/admin/dashboard/activity",
-        icon: ListStartIcon,
-      },
-      {
-        title: "Settings",
-        url: "/admin/dashboard/settings",
-      },
+  },
+  {
+    title: "Surveys",
+    url: "/admin/surveys",
+    icon: NotepadText,
+    onlyForRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN],
+  },
+  {
+    title: "Create Survey",
+    url: "/admin/create-survey",
+    icon: NotebookPen,
+    onlyForRoles: [UserRoles.RESEARCHER, UserRoles.SUPER_ADMIN],
+  },
+  {
+    title: "Leaderboard",
+    url: "/admin/leaderboard",
+    icon: ChartColumn,
+    onlyForRoles: [UserRoles.RESPONDENT, UserRoles.SUPER_ADMIN],
+  },
+  {
+    title: "My Surveys",
+    url: "/admin/my-surveys",
+    icon: NotepadText,
+    onlyForRoles: [
+      UserRoles.RESEARCHER,
+      UserRoles.RESPONDENT,
+      UserRoles.SUPER_ADMIN,
     ],
   },
   {
-    title: "Playground",
-    url: "/admin/playground",
-    icon: SquareTerminal,
-    onlyForRoles: [UserRoles.ADMIN],
-    items: [
-      {
-        title: "History",
-        url: "/admin/playground/history",
-        icon: HistoryIcon,
-      },
-      {
-        title: "Starred",
-        url: "/admin/playground/starred",
-        icon: ListStartIcon,
-      },
-      {
-        title: "Settings",
-        url: "/admin/playground/settings",
-      },
-    ],
-  },
-  {
-    title: "Documentation",
-    url: "/admin/docs",
-    icon: BookOpen,
-    items: [
-      {
-        title: "Introduction",
-        url: "/admin/docs/introduction",
-        onlyForRoles: [UserRoles.OPERATOR],
-      },
-      {
-        title: "Get Started",
-        url: "/admin/docs/get-started",
-        onlyForRoles: [UserRoles.SCANNER],
-      },
-      {
-        title: "Tutorials",
-        url: "/admin/docs/tutorials",
-        onlyForRoles: [UserRoles.ADMIN],
-      },
-      {
-        title: "Changelog",
-        url: "/admin/docs/changelog",
-      },
-    ],
+    title: "My Rewards",
+    url: "/admin/my-rewards",
+    icon: Medal,
+    onlyForRoles: [UserRoles.RESPONDENT, UserRoles.SUPER_ADMIN],
   },
   {
     title: "Users",
     url: "/admin/users",
     icon: Users,
-  },
-];
-
-/**
- * An array of routes showing in admin sidebar as Dropdown menu
- */
-const projects: IMenueItem[] = [
-  {
-    title: "Design Engineering",
-    url: "/design",
-    icon: Frame,
-    items: [
-      {
-        title: "View Project",
-        url: "/design/view",
-        icon: Folder,
-      },
-      {
-        title: "Share Project",
-        url: "/design/share",
-        icon: Forward,
-        seperator: true,
-      },
-      {
-        title: "Delete Project",
-        url: "/design/delete",
-        icon: Trash2,
-      },
-    ],
+    onlyForRoles: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN],
   },
   {
-    title: "Sales & Marketing",
-    url: "/sales",
-    icon: PieChart,
-    items: [
-      {
-        title: "View Project",
-        url: "/sales/view",
-        icon: Folder,
-      },
-      {
-        title: "Share Project",
-        url: "/sales/share",
-        icon: Forward,
-      },
-      {
-        title: "Delete Project",
-        url: "/sales/delete",
-        icon: Trash2,
-      },
-    ],
-  },
-  {
-    title: "Sales & Marketing 2",
-    url: "/sales2",
-    icon: PieChart,
-    items: [
-      {
-        title: "View Project 2",
-        url: "/sales2/view",
-        icon: Folder,
-      },
-      {
-        title: "Share Project 2",
-        url: "/sales2/share",
-        icon: Forward,
-      },
-      {
-        title: "Delete Project 2",
-        url: "/sales2/delete",
-        icon: Trash2,
-      },
-    ],
+    title: "Profile",
+    url: "/admin/profile",
+    icon: CircleUserRound,
   },
 ];
 
@@ -192,13 +91,6 @@ export function availableNavMainRoutes(role: UserRoles | undefined) {
   });
 }
 
-export function availableProjectsRoutes(role: UserRoles | undefined) {
-  return getAvailableRoutesForRole({
-    role,
-    routes: projects,
-  });
-}
-
 export function getAllAvailableRoutes(role: UserRoles | undefined) {
-  return [...availableNavMainRoutes(role), ...availableProjectsRoutes(role)];
+  return [...availableNavMainRoutes(role)];
 }
