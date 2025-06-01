@@ -9,3 +9,5 @@ export const homeAnswer=  "/landingpageImages/answer.png";
 export const getPaid= "/landingpageImages/getPaid.png";
 export const homeResearcher= '/landingpageImages/homeResearcher.png';
 export const aboutus = '/landingpageImages/aboutus.png';
+export const userloginImg = '/login/username.png';
+export const loginpwImg = '/login/password.png';
