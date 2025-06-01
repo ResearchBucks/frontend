@@ -45,7 +45,7 @@ const navMain: IMenueItem[] = [
   },
   {
     title: "Create Survey",
-    url: "/admin/create-survey",
+    url: "/admin/surveys/create",
     icon: NotebookPen,
     onlyForRoles: [UserRoles.RESEARCHER, UserRoles.SUPER_ADMIN],
   },
