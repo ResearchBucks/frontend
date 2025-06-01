@@ -13,10 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 import { BRAND } from "@/data/brand";
 import Image from "next/image";
-import {
-  availableNavMainRoutes,
-  availableProjectsRoutes,
-} from "@/data/routes/admin-routes";
+import { availableNavMainRoutes } from "@/data/routes/admin-routes";
 import { UserRoles } from "@/enum/user";
 
 const user = {
@@ -33,7 +30,7 @@ export function AppSidebar({ role, ...props }: AppSidebarProps) {
   const { open } = useSidebar();
 
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="icon" {...props} className="bg-[var(--main-light)]">
       <SidebarHeader>
         <div className="w-full flex justify-center items-center py-3">
           <Image
@@ -47,7 +44,6 @@ export function AppSidebar({ role, ...props }: AppSidebarProps) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={availableNavMainRoutes(role)} />
-        <NavProjects projects={availableProjectsRoutes(role)} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user} />
