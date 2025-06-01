@@ -3,7 +3,6 @@
 import { forwardRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
 import { cn } from "@/lib/utils";
 import {
   NavigationMenu,
@@ -16,13 +15,11 @@ import {
 } from "@/components/ui/navigation-menu";
 import { IMenueItem } from "@/types/navigation"; 
 
-export function DesktopNavMenu({ navBarRoutes }: Readonly<{ navBarRoutes: IMenueItem[] }>)  {
-  const filteredNavMenues = navBarRoutes;
-
+export function DesktopNavMenu({ navBarRoutes }: Readonly<{ navBarRoutes: IMenueItem[] }>) {
   return (
     <NavigationMenu className="items-center h-full">
       <NavigationMenuList>
-        {filteredNavMenues.map((menu) => (
+        {navBarRoutes.map((menu) => (
           <NavigationMenuItem
             key={"groupTitle" in menu ? menu.groupTitle : menu.title}
           >
@@ -36,6 +33,7 @@ export function DesktopNavMenu({ navBarRoutes }: Readonly<{ navBarRoutes: IMenue
                         key={item.title}
                         title={item.title}
                         href={item.href}
+                        target={item.linkTarget}
                       >
                         {item.description}
                       </ListItem>
@@ -43,12 +41,24 @@ export function DesktopNavMenu({ navBarRoutes }: Readonly<{ navBarRoutes: IMenue
                   </ul>
                 </NavigationMenuContent>
               </>
-            ) : (
-              <Link href={menu.href} legacyBehavior passHref>
+            ) : menu.href ? (
+              <Link 
+                href={menu.href} 
+                legacyBehavior 
+                passHref
+                target={menu.linkTarget}
+              >
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   {menu.title}
                 </NavigationMenuLink>
               </Link>
+            ) : (
+              <button
+                onClick={menu.onClick}
+                className={navigationMenuTriggerStyle()}
+              >
+                {menu.title}
+              </button>
             )}
           </NavigationMenuItem>
         ))}
@@ -60,7 +70,7 @@ export function DesktopNavMenu({ navBarRoutes }: Readonly<{ navBarRoutes: IMenue
 const ListItem = forwardRef<
   React.ComponentRef<"a">,
   React.ComponentPropsWithoutRef<"a">
->(({ className, title, href, children, ...props }, ref) => {
+>(({ className, title, href, children, target, ...props }, ref) => {
   const isActive = usePathname() === href;
 
   return (
@@ -75,6 +85,8 @@ const ListItem = forwardRef<
               : "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
             className
           )}
+          href={href}
+          target={target}
           {...props}
         >
           <div className="text-sm font-medium leading-none">{title}</div>
