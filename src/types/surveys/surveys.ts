@@ -35,15 +35,13 @@ export interface SurveyCardProps {
   onDelete?: (surveyId: string) => void;
 }
 
-
-// types/survey-builder/survey-builder.ts
-export type QuestionType = 
-  | "single_select" 
-  | "multi_select" 
-  | "yes_no" 
-  | "text" 
-  | "textarea" 
-  | "rating" 
+export type QuestionType =
+  | "single_select"
+  | "multi_select"
+  | "yes_no"
+  | "text"
+  | "textarea"
+  | "rating"
   | "number";
 
 export interface QuestionOption {
