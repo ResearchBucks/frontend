@@ -54,7 +54,7 @@ export default async function UsersPage(props: {
   };
 
   try {
-    response = await getUsers(payload);
+    // response = await getUsers(payload);
     userData = response.users;
     tableMessage = "Loading...";
     pages = response.pagination.totalPages;
