@@ -28,16 +28,15 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Install Pack CLI (Buildpacks)
-        run: |
-          curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.33.2/pack-v0.33.2-linux.tgz" | tar -xz
-          sudo mv pack /usr/local/bin/pack
+      - name: Build Docker image
+          run: |
+          docker build -t $IMAGE_NAME:latest .
 
-      - name: Build image with Buildpacks (PAC)
-        run: |
-          pack build $IMAGE_NAME:latest \
-            --builder paketobuildpacks/builder:base \
-            --publish
+      - name: Push to Docker Hub
+          run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          docker push $IMAGE_NAME:latest
+
 
   deploy:
     name: Force New Deployment in ECS
