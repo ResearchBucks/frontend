@@ -12,7 +12,7 @@ export default function CreateSurveyPage() {
     console.log("Saving survey:", survey);
 
     alert("Survey created successfully!");
-    router.push("/surveys");
+    //router.push("/surveys");
   };
 
   const handleCancel = () => {
@@ -22,14 +22,14 @@ export default function CreateSurveyPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto py-8">
-        {/* <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
+        <div className="mb-8">
+          <h3 className="text-xl font-bold text-gray-900">
             Create New Survey
-          </h1>
-          <p className="text-gray-600 mt-2">
+          </h3>
+          <p className="text-gray-600 text-sm">
             Build your survey by adding questions and configuring their options
           </p>
-        </div> */}
+        </div>
 
         <SurveyBuilder onSave={handleSave} onCancel={handleCancel} />
       </div>
