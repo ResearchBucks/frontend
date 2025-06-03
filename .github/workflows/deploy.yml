@@ -1,0 +1,59 @@
+name: Build and Deploy to ECS
+
+on:
+  push:
+    branches:
+      - dev-release
+
+env:
+  IMAGE_NAME: hiransanjeewa/research-bucks
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+
+jobs:
+  build-and-push:
+    name: Build & Push Docker Image with Buildpacks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Install Pack CLI (Buildpacks)
+        run: |
+          curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.33.2/pack-v0.33.2-linux.tgz" | tar -xz
+          sudo mv pack /usr/local/bin/pack
+
+      - name: Build image with Buildpacks (PAC)
+        run: |
+          pack build $IMAGE_NAME:latest \
+            --builder paketobuildpacks/builder:base \
+            --publish
+
+  deploy:
+    name: Force New Deployment in ECS
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Force new deployment with same task definition
+        run: |
+          aws ecs update-service \
+            --cluster ${{ secrets.ECS_CLUSTER }} \
+            --service ${{ secrets.ECS_SERVICE }} \
+            --force-new-deployment
