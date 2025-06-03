@@ -42,6 +42,7 @@ jobs:
     name: Force New Deployment in ECS
     needs: build-and-push
     runs-on: ubuntu-latest
+    environment: Dev
 
     steps:
       - name: Configure AWS Credentials
