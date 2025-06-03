@@ -29,13 +29,13 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker image
-          run: |
-            docker build -t $IMAGE_NAME:latest .
+        run: |
+          docker build -t $IMAGE_NAME:latest .
 
       - name: Push to Docker Hub
-          run: |
-            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-            docker push $IMAGE_NAME:latest
+        run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          docker push $IMAGE_NAME:latest
 
 
   deploy:
