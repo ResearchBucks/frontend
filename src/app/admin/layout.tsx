@@ -10,16 +10,15 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get("sidebar:state")?.value === "true";
+  const defaultOpen = true;
 
   //Todo: Get the user role from session
-  const userRole = UserRoles.ADMIN;
+  const userRole = UserRoles.SUPER_ADMIN;
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <div className="flex h-screen w-screen overflow-hidden">
-        <AppSidebar role={userRole} />
+        <AppSidebar role={userRole} className="bg-[var(--main-light)]" />
         <div className="flex-1 flex flex-col overflow-hidden">
           <AdminHeaderContent role={userRole} />
           <div className="flex-1 overflow-auto p-4">
