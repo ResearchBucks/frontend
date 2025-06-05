@@ -12,9 +12,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { QuestionBuilder } from "./question-builder";
 
 interface SurveyBuilderProps {
-  initialData?: SurveyForm;
-  onSave?: (survey: SurveyForm) => void;
-  onCancel?: () => void;
+  readonly initialData?: SurveyForm;
+  readonly onSave?: (survey: SurveyForm) => void;
+  readonly onCancel?: () => void;
 }
 
 export function SurveyBuilder({
