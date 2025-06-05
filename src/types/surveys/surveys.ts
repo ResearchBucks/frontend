@@ -21,7 +21,7 @@ export interface SurveyFilters {
 }
 
 export interface SurveyGridProps {
-  surveys: ISurvey[];
+  surveys: Survey[];
   totalSurveys: number;
   currentPage: number;
   totalPages: number;
@@ -29,10 +29,11 @@ export interface SurveyGridProps {
 }
 
 export interface SurveyCardProps {
-  survey: ISurvey;
+  survey: Survey;
   onView?: (surveyId: string) => void;
   onEdit?: (surveyId: string) => void;
   onDelete?: (surveyId: string) => void;
+  readonly onFillSurvey?: (response: SurveyResponse) => void;
 }
 
 export type QuestionType =
@@ -69,20 +70,6 @@ export interface SurveyForm {
   updatedAt?: string;
 }
 
-export interface QuestionBuilderProps {
-  question: Question;
-  onUpdate: (question: Question) => void;
-  onDelete: (questionId: string) => void;
-  questionNumber: number;
-}
-
-export interface OptionBuilderProps {
-  option: QuestionOption;
-  onUpdate: (option: QuestionOption) => void;
-  onDelete: (optionId: string) => void;
-  showSinhala: boolean;
-}
-
 export const questionTypeOptions = [
   { value: "single_select", label: "Single Select" },
   { value: "multi_select", label: "Multi Select" },
@@ -92,3 +79,60 @@ export const questionTypeOptions = [
   { value: "rating", label: "Rating (1-5)" },
   { value: "number", label: "Number" },
 ] as const;
+
+export interface QuestionOption {
+  id: string;
+  text: string;
+  sinhalaText?: string;
+}
+
+export interface Question {
+  id: string;
+  text: string;
+  sinhalaText?: string;
+  type: QuestionType;
+  options: QuestionOption[];
+  required: boolean;
+  order: number;
+}
+
+export interface SurveyForm {
+  id?: string;
+  title: string;
+  description: string;
+  questions: Question[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Survey extends SurveyForm {
+  id: string;
+  status: "active" | "completed" | "draft" | "expired";
+  dueDate: string;
+  dueTime: string;
+  price: number;
+  imageUrl?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SurveyResponse {
+  id: string;
+  surveyId: string;
+  responses: Record<string, any>;
+  submittedAt: string;
+}
+
+export interface QuestionBuilderProps {
+  readonly question: Question;
+  readonly questionNumber: number;
+  readonly onUpdate: (question: Question) => void;
+  readonly onDelete: (questionId: string) => void;
+}
+
+export interface OptionBuilderProps {
+  readonly option: QuestionOption;
+  readonly onUpdate: (option: QuestionOption) => void;
+  readonly onDelete: (optionId: string) => void;
+  readonly showSinhala: boolean;
+}
