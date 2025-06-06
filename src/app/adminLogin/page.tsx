@@ -8,25 +8,32 @@ import type { adminLoginDataTypes } from "@/schema/user/user-details";
 import CustomAxios from "../api/CustomAxios";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useAppDispatch } from "@/lib/redux/hooks";
+import { setAccessToken } from "@/lib/redux/authSlice";
 
 type adminLoginRes ={
     status:string;
     message:string;
-    data:Record<string, any>;
+    data:{
+        token:string;
+        email:string;
+        roles:string[]
+    };
 }
 
 
-
 export default function AdminLogin() {
-
+    const dispatch = useAppDispatch();
     const {register, handleSubmit, formState:{errors},} =useForm<adminLoginDataTypes>({
         resolver: zodResolver(adminLoginSchema),
     });
 
+    //the login submit function
     const onsubmit = async (data:adminLoginDataTypes) =>{
         try{
             const res = await CustomAxios.post<adminLoginRes>("admin/auth/login", data);
             if(res.status === 200){
+                dispatch(setAccessToken(res.data.data.token))
                 console.log(res.data)
             }
         }catch(err){
