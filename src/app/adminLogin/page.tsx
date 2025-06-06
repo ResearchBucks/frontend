@@ -1,6 +1,6 @@
 "use client";
 
-import { back5, logo } from "@/assests/assests";
+import { back5, back, back6, logo } from "@/assests/assests";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { adminLoginSchema } from "@/schema/user/user-details";
@@ -40,27 +40,33 @@ export default function AdminLogin() {
             console.log(err)
         }
     }
+
   return (
-    <div className="min-h-screen h-screen w-screen overflow-hidden flex justify-center items-center bg-mainlight">
-      <div className="grid grid-cols-1 lg:grid-cols-2 h-[80vh] p-3 gap-3 bg-white w-[900px] rounded-md">
-        <div className="w-full h-full">
-            <img src={back5} className="w-full h-full rounded-md"/>
+    <div className="min-h-screen h-screen w-screen flex justify-center items-center bg-white ">
+      <div className="grid md:grid-cols-2 grid-cols-1 mob:h-[78vh] p-3 gap-3 bg-mainlight xl:w-[850px] md:w-[700px] mob:w-[400px] mob2:w-full mob2:h-full  rounded-md shadow-sm">
+        <div className="w-full h-full mob2:hidden md:flex overflow-hidden rounded-md">
+            <img src={back} className="w-full h-full object-cover rounded-md"/>
         </div>
-        <div className="flex flex-col gap-2 justify-center items-center">
-            <div>
-                <div className="w-32">
-                    <img src={logo} className="w-full"/>
+        <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col gap-5">
+                {/* the logo is shown here */}
+                <div className="w-full flex justify-center items-center ">
+                    <img src={logo} className="w-full size-32"/>
                 </div>
-                <div className="text-center">
-                    <h1 className="font-semibold text-xl">Welcome Back!</h1>
-                    <p className="text-sm">Kindly Provide your details to login into account</p>
+
+                {/* the text section of login */}
+                <div className="text-center flex flex-col gap-2">
+                    <h1 className="font-medium text-lg">Welcome Back!</h1>
+                    <p className="text-xs">Kindly Provide your details to login into account</p>
                 </div>
-                <div className="">
-                    <form
-                        onSubmit={handleSubmit(onsubmit)}
-                    >
+
+                
+                <form
+                    onSubmit={handleSubmit(onsubmit)}
+                    className="flex flex-col gap-4"
+                >
                         <div>
-                            <label>Email</label>
+                            <label className="text-sm">Email</label>
                             <Input
                                 type="email"
                                 placeholder="ex: admin@gmail.com"
@@ -74,28 +80,36 @@ export default function AdminLogin() {
                                 )}
                         </div>
                         <div>
-                            <label>Password</label>
+                            <label className="text-sm">Password</label>
                             <Input
                                 type="password"
                                 placeholder="*******"
                                 {...register("password")}
                                 className={errors.password ? "border border-error" : ""}
                             />
+
+                            <div className="flex flex-row justify-end pt-1">
+                                <p className="text-[.7rem] cursor-pointer hover:text-main hover:font-medium ">Forgot Password ?</p>
+                            </div>
+                        
                                 {errors.password && (
                                     <span className="text-[10px] text-error">
                                         {errors.password.message}
                                     </span>
                                 )}
                         </div>
+
+                        <div className="pt-3 w-full">
                         <Button
-                            type="submit"
-                            variant ="default"
-                            size="sm"
-                            name="Submit"
-                        />
-        
-                    </form>
-                </div>
+                                type="submit"
+                                variant ="login"
+                                size="sm"
+                                name="Submit"
+                                className="w-full cursor-pointer"
+                            />
+                        </div>
+                </form>
+
             </div>
         </div>
       </div>

@@ -12,6 +12,9 @@
   --color-secondtext: #1E1E1E;
   --color-error: #FF0000;
   
+  --breakpoint-mob:412px;
+  --breakpoint-mob2:320px;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
