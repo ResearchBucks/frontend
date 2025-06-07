@@ -3,7 +3,6 @@ import Image from "next/image";
 import { logo } from "@/assests/assests";
 import Link from "next/link";
 import { useState } from "react";
-import { LoginForm } from "@/components/login-form";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import LoginPage from "@/app/login/page";
 
@@ -16,13 +15,13 @@ export default function Header() {
     { title: "Surveys", href: "/#surveys" },
     { title: "Researcher", href: "/#researcher" },
     { title: "About Us", href: "/#aboutus" },
-    { title: "Login", href: "#" }, // href="#" to maintain link styling
+    { title: "Login", href: "#" },
     { title: "Sign Up", href: "#signup" },
   ];
 
+
   return (
     <div className="bg-white sticky top-0 z-50">
-      {/* Login Dialog */}
       <Dialog open={openModel === "login"} onOpenChange={(open) => !open && setOpenModel(null)}>
         <DialogContent className="sm:max-w-[425px]">
           <LoginPage />
@@ -30,7 +29,6 @@ export default function Header() {
       </Dialog>
 
       <div className="flex flex-row justify-between items-center px-6 py-3 max-w-[1440px] mx-auto">
-        {/* Logo on the left */}
         <Link href="/" className="flex items-center">
           <Image
             src={logo}
@@ -42,22 +40,18 @@ export default function Header() {
           />
         </Link>
 
-        {/* Navigation items on the right */}
-        <ul className="flex flex-row gap-4 text-sm font-semibold">
+        <ul className="flex flex-row gap-4 items-center">
           {navItems.map((item, index) => (
             <li key={index}>
               {item.title === "Login" ? (
                 <button
-                  onClick={() => setOpenModel(item.title.toLowerCase())}
-                  className="cursor-pointer hover:bg-main p-2 rounded-sm hover:text-maintext w-full text-left"
+                  onClick={() => setOpenModel("login")}
+                  className="cursor-pointer hover:bg-main p-2 rounded-sm hover:text-maintext text-sm font-semibold"
                 >
                   {item.title}
                 </button>
               ) : (
-                <Link
-                  href={item.href}
-                  className="cursor-pointer hover:bg-main p-2 rounded-sm hover:text-maintext"
-                >
+                <Link href={item.href} className="cursor-pointer hover:bg-main p-2 rounded-sm hover:text-maintext text-sm font-semibold">
                   {item.title}
                 </Link>
               )}
