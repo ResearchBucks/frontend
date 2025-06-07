@@ -12,7 +12,7 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 
 export function SignUp({ onSwitch }: { onSwitch: () => void }) {
-  const [userLoginType, setUserLoginType] = useState<string | null>(null);
+  const [userLoginType, setUserLoginType] = useState<string | null>("researcher");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPw, setShowConfrimPw] = useState<boolean>(false);
 
@@ -184,7 +184,7 @@ export function SignUp({ onSwitch }: { onSwitch: () => void }) {
           <div className="flex flex-col relative">
             <Input
               type={showPassword ? "text" : "password"}
-              placeholder="*******"
+              placeholder="Password"
               {...register("password")}
               className={errors.password ? "border border-error" : ""}
             />
@@ -240,7 +240,7 @@ export function SignUp({ onSwitch }: { onSwitch: () => void }) {
         <p>
           Already have an account?{" "}
           <span
-            className="hover:font-medium hover:underline hover:text-main cursor-pointer"
+            className="font-medium hover:underline hover:text-main cursor-pointer"
             onClick={onSwitch}
           >
             Login
