@@ -24,4 +24,10 @@ export const adminLoginSchema = z.object({
   password:passwordSchema,
 })
 
+export const userLoginSchema = z.object({
+    email:z.string().email(),
+    password:passwordSchema,
+})
+
+export type userLoginDataTypes = z.infer<typeof userLoginSchema>;
 export type adminLoginDataTypes = z.infer<typeof adminLoginSchema>;

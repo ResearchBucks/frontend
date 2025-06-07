@@ -3,7 +3,7 @@ import Image from "next/image";
 import { logo } from "@/assests/assests";
 import Link from "next/link";
 import { useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent,DialogTitle} from "@/components/ui/dialog";
 import LoginPage from "@/app/login/page";
 
 export default function Header() {
@@ -24,6 +24,7 @@ export default function Header() {
     <div className="bg-white sticky top-0 z-50">
       <Dialog open={openModel === "login"} onOpenChange={(open) => !open && setOpenModel(null)}>
         <DialogContent className="sm:max-w-[425px]">
+            <DialogTitle className="text-lg font-bold mb-2 text-center ">Login</DialogTitle>
           <LoginPage />
         </DialogContent>
       </Dialog>
