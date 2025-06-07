@@ -39,18 +39,8 @@ export const researcherSignupschema = z.object({
   mobile:z.number().min(10),
   nic:z.string().min(10),
   address:z.string().min(1),
-  password:passwordSchema,
-  confirm_password:confirmPasswordSchema,
 })
-.superRefine(({ confirm_password, password }, ctx) => {
- if (confirm_password !== password) {
-    ctx.addIssue({
-      code: "custom",
-      message: "The passwords doesn't match",
-      path: ['confirm_password']
-    });
-  }
-});
+
 
 
 export const respondentSignupSchema =z.object({
@@ -60,18 +50,8 @@ export const respondentSignupSchema =z.object({
   mobile:z.number().min(10),
   nic:z.string().min(10),
   address:z.string().min(1),
-  password:passwordSchema,
-  confirm_password:confirmPasswordSchema,
 })
-.superRefine(({ confirm_password, password }, ctx) => {
- if (confirm_password !== password) {
-    ctx.addIssue({
-      code: "custom",
-      message: "The passwords doesn't match",
-      path: ['confirm_password']
-    });
-  }
-});
+
 
 
 export type respondentSignupDatatypes = z.infer<typeof respondentSignupSchema>;

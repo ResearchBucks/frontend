@@ -210,7 +210,7 @@ export function SignUp({ onSwitch }: { onSwitch: () => void }) {
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-3">
+        {/* <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col relative">
             <Input
               type={showPassword ? "text" : "password"}
@@ -251,7 +251,7 @@ export function SignUp({ onSwitch }: { onSwitch: () => void }) {
               </span>
             )}
           </div>
-        </div>
+        </div> */}
 
         <div className="pt-3 w-full">
           <Button
