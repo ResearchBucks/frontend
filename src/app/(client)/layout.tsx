@@ -13,7 +13,7 @@ export default function ClientLayout({
   return (
     <div>
       <NavBar navBarRoutes={navBarRoutes} brand={BRAND} />
-      <main className="py-10 min-h-screen">{children}</main>
+      <main className="min-h-screen">{children}</main>
       <Footer footerRoutes={footerRoutes} brand={BRAND} />
     </div>
   );

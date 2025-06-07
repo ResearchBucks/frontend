@@ -7,6 +7,9 @@ import { BrandType } from "@/data/brand";
 import Link from "next/link";
 import { IMenueItem } from "@/types/navigation";
 import Container from "../container";
+import {logo} from '@/assests/assests';
+import LoginPage from "@/app/login/page";
+import { Modal } from "@/components/blurmodal/modal";
 
 export default function NavBar({
   navBarRoutes,
@@ -14,20 +17,18 @@ export default function NavBar({
 }: Readonly<{ navBarRoutes: IMenueItem[]; brand: BrandType }>) {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const controlNavbar = useCallback(() => {
     if (typeof window !== "undefined") {
       const navBarHeight = document.querySelector("header")?.clientHeight || 0;
       if (window.scrollY > navBarHeight) {
         if (window.scrollY > lastScrollY) {
-          // if scroll down hide the navbar
-          setIsVisible(false);
+          setIsVisible(true);
         } else {
-          // if scroll up show the navbar
           setIsVisible(true);
         }
       } else {
-        // if scroll is less than 85px from top, always show the navbar
         setIsVisible(true);
       }
       setLastScrollY(window.scrollY);
@@ -37,40 +38,54 @@ export default function NavBar({
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.addEventListener("scroll", controlNavbar);
-
-      // cleanup function
       return () => {
         window.removeEventListener("scroll", controlNavbar);
       };
     }
   }, [controlNavbar]);
 
+  // Modify the navBarRoutes to include the click handler for Login
+  const modifiedNavBarRoutes = navBarRoutes.map(menu => {
+    if (!('groupTitle' in menu) && menu.title === "Login") {
+      return {
+        ...menu,
+        onClick: () => setIsLoginModalOpen(true)
+      };
+    }
+    return menu;
+  });
+
   return (
-    <header
-      className={`py-3 border-b-2 sticky top-0 bg-background transition-transform duration-300 ${
-        isVisible ? "translate-y-0" : "-translate-y-full"
-      }`}
-    >
-      <Container>
-        <div className="flex justify-between">
-          <Link href="/">
-            <Image
-              src={brand.logo}
-              alt={`${brand.name} Logo`}
-              width={100}
-              height={100}
-            />
-          </Link>
-          <nav className="flex items-center">
-            <div className="md:hidden">
-              <MobileNavMenu navBarRoutes={navBarRoutes} brand={brand} />
-            </div>
-            <div className="hidden md:block">
-              <DesktopNavMenu navBarRoutes={navBarRoutes} />
-            </div>
-          </nav>
-        </div>
-      </Container>
-    </header>
+    <>
+      <header
+        className={`py-3 border-b-2 sticky z-50 top-0 bg-[var(--background-light)] transition-transform duration-300 ${
+          isVisible ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
+        <Container>
+          <div className="flex justify-between">
+            <Link href="/">
+              <Image
+                src={logo}
+                alt="ResearchBucks"
+                width={150}
+                height={150}
+              />
+            </Link>
+            <nav className="flex items-center">
+              <div className="md:hidden">
+                <MobileNavMenu navBarRoutes={modifiedNavBarRoutes} brand={brand} />
+              </div>
+              <div className="hidden md:block">
+                <DesktopNavMenu navBarRoutes={modifiedNavBarRoutes} />
+              </div>
+            </nav>
+          </div>
+        </Container>
+      </header>
+      <Modal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)}>
+        <LoginPage />
+      </Modal>
+    </>
   );
 }

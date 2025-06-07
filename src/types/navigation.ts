@@ -2,7 +2,8 @@ import { TlinkTarget } from "./components-props";
 
 export interface IBaseMenuItem {
   title: string;
-  href: string;
+  href?: string;
+  onClick?: () => void; 
   linkTarget?: TlinkTarget;
   description?: string;
   showOnlyIn?: "footer" | "navbar";

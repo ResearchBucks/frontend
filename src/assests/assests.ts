@@ -1,0 +1,19 @@
+
+export const logo = '/ResearchBucks.png';
+export const footerLogo = "/footerLogo.png"
+export const homeSectionImgOne= "/landingpageImages/homeSectionImgOne.png";
+export const homeSectionImgTwo= "/landingpageImages/homeSectionImgTwo.png";
+export const homeRespondent= "/landingpageImages/homeRespondents.png";
+export const surveySignup= "/landingpageImages/signup.png";
+export const homeAnswer=  "/landingpageImages/answer.png";
+export const getPaid= "/landingpageImages/getPaid.png";
+export const homeResearcher= '/landingpageImages/homeResearcher.png';
+export const aboutus = '/landingpageImages/aboutus.png';
+export const userloginImg = '/login/username.png';
+export const loginpwImg = '/login/password.png';
+export const back= '/back1.png';
+export const back2 ='/back2.jpg';
+export const back3 = '/back3.png'
+export const back4 = '/back4.jpg'
+export const back5 = '/back5.jpg'
+export const back6 = '/back6.png'
