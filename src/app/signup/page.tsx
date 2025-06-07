@@ -6,7 +6,7 @@ import {
   researcherSignupschema,
   researcherSignupDataTypes,
   respondentSignupSchema,
-  respondentSignupDatatypes
+  respondentSignupDatatypes,
 } from "@/schema/user/user-details";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CustomAxios from "../api/CustomAxios";
@@ -14,25 +14,25 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 
 export function SignUp({ onSwitch }: { onSwitch: () => void }) {
-  const [userLoginType, setUserLoginType] = useState<"researcher" | "respondent">("researcher");
+  const [userLoginType, setUserLoginType] = useState<
+    "researcher" | "respondent"
+  >("researcher");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPw, setShowConfrimPw] = useState<boolean>(false);
 
-
-  //getting the schems and types based on user Login types
-const {schema, endpoint} = useMemo(()=>{
-    if(userLoginType === "researcher"){
-        return{
-            schema: researcherSignupschema,
-            endpoint:"researcher/user/register"
-        }
-    }else{
-        return{
-            schema:respondentSignupSchema,
-            endpoint:"respondent/user/register"
-        }
+  const { schema, endpoint } = useMemo(() => {
+    if (userLoginType === "researcher") {
+      return {
+        schema: researcherSignupschema,
+        endpoint: "researcher/user/register",
+      };
+    } else {
+      return {
+        schema: respondentSignupSchema,
+        endpoint: "respondent/user/register",
+      };
     }
-},[userLoginType])
+  }, [userLoginType]);
 
   const {
     register,
@@ -43,10 +43,12 @@ const {schema, endpoint} = useMemo(()=>{
     resolver: zodResolver(schema),
   });
 
-  const onsubmit = async (data: researcherSignupDataTypes | respondentSignupDatatypes) => {
+  const onsubmit = async (
+    data: researcherSignupDataTypes | respondentSignupDatatypes
+  ) => {
     try {
       const res = await CustomAxios.post(endpoint, data);
-      if (res.status === 200) {
+      if (res.status === 201) {
         console.log(res.data);
         reset();
       }
@@ -57,7 +59,6 @@ const {schema, endpoint} = useMemo(()=>{
 
   return (
     <>
-      {/* the section that handle the user type researcher or respondent */}
       <div className="flex flex-col">
         <p className="text-base font-medium text-center">
           Signup to ResearchBucks as
@@ -86,12 +87,8 @@ const {schema, endpoint} = useMemo(()=>{
         </div>
       </div>
 
-      {/* the form section for input fields */}
       <form onSubmit={handleSubmit(onsubmit)} className="flex flex-col gap-3">
-
-        {/* separated firstName, lastName, occupation, email, and contact onto two col */}
         <div className="grid grid-cols-2 gap-3">
-          {/* the firstName input field */}
           <div className="flex flex-col">
             <Input
               type="text"
@@ -106,7 +103,6 @@ const {schema, endpoint} = useMemo(()=>{
             )}
           </div>
 
-          {/* the lastName input field */}
           <div className="flex flex-col">
             <Input
               type="text"
@@ -121,29 +117,6 @@ const {schema, endpoint} = useMemo(()=>{
             )}
           </div>
 
-        {/* showing the occupation field if the user is a researcher */}
-        {userLoginType === "researcher" &&(
-            <>
-            {/* the occupation input field */}
-            <div className="flex flex-col">
-                <Input
-                type="text"
-                placeholder="Occupation"
-                {...register("occupation")}
-                className={errors.occupation ? "border border-error" : ""}
-                />
-                {errors.occupation && (
-                <span className="text-[10px] text-red-600">
-                    {errors.occupation?.message}
-                </span>
-                )}
-            </div>         
-            </>
-
-        )}
-
-
-          {/* the email input field */}
           <div className="flex flex-col">
             <Input
               type="email"
@@ -158,12 +131,11 @@ const {schema, endpoint} = useMemo(()=>{
             )}
           </div>
 
-          {/* the mobile input field */}
           <div className="flex flex-col">
             <Input
               type="number"
-              placeholder="Contact "
-             {...register("mobile", { valueAsNumber: true })}
+              placeholder="Contact"
+              {...register("mobile", { valueAsNumber: true })}
               className={errors.mobile ? "border border-error" : ""}
             />
             {errors.mobile && (
@@ -172,12 +144,44 @@ const {schema, endpoint} = useMemo(()=>{
               </span>
             )}
           </div>
+        </div>
 
-          {/* the NIC input field */}
+        {/* Occupation/NIC row (researcher) or Address/NIC row (respondent) */}
+        <div className="grid grid-cols-2 gap-3">
+          {userLoginType === "researcher" ? (
+            <div className="flex flex-col">
+              <Input
+                type="text"
+                placeholder="Occupation"
+                {...register("occupation")}
+                className={errors.occupation ? "border border-error" : ""}
+              />
+              {errors.occupation && (
+                <span className="text-[10px] text-red-600">
+                  {(errors as any).occupation?.message}
+                </span>
+              )}
+            </div>
+          ) : (
+            <div className="flex flex-col">
+              <Input
+                type="text"
+                placeholder="Address"
+                {...register("address")}
+                className={errors.address ? "border border-error" : ""}
+              />
+              {errors.address && (
+                <span className="text-[10px] text-red-600">
+                  {errors.address.message}
+                </span>
+              )}
+            </div>
+          )}
+
           <div className="flex flex-col">
             <Input
               type="text"
-              placeholder="NIC "
+              placeholder="NIC"
               {...register("nic")}
               className={errors.nic ? "border border-error" : ""}
             />
@@ -189,25 +193,24 @@ const {schema, endpoint} = useMemo(()=>{
           </div>
         </div>
 
-        {/* address is in one row */}
-        {/* the address input field */}
-        <div className="flex flex-col">
-          <Input
-            type="text"
-            placeholder="Address "
-            {...register("address")}
-            className={errors.address ? "border border-error" : ""}
-          />
-          {errors.address && (
-            <span className="text-[10px] text-red-600">
-              {errors.address.message}
-            </span>
-          )}
-        </div>
+        {/* Address field (only for researcher) */}
+        {userLoginType === "researcher" && (
+          <div className="flex flex-col">
+            <Input
+              type="text"
+              placeholder="Address"
+              {...register("address")}
+              className={errors.address ? "border border-error" : ""}
+            />
+            {errors.address && (
+              <span className="text-[10px] text-red-600">
+                {errors.address.message}
+              </span>
+            )}
+          </div>
+        )}
 
-        {/* separated password and confirm_password into two col */}
         <div className="grid grid-cols-2 gap-3">
-          {/* the input field for password */}
           <div className="flex flex-col relative">
             <Input
               type={showPassword ? "text" : "password"}
@@ -228,15 +231,12 @@ const {schema, endpoint} = useMemo(()=>{
               </span>
             )}
           </div>
-          {/* the confirm_password input field */}
           <div className="relative flex flex-col">
             <Input
               type={showConfirmPw ? "text" : "password"}
               placeholder="Confirm password"
               {...register("confirm_password")}
-              className={
-                errors.confirm_password ? "border border-error" : ""
-              }
+              className={errors.confirm_password ? "border border-error" : ""}
             />
             <button
               type="button"
