@@ -24,7 +24,7 @@ export default function Header() {
     <div className="bg-white sticky top-0 z-50">
       <Dialog open={openModel === "login"} onOpenChange={(open) => !open && setOpenModel(null)}>
         <DialogContent className="sm:max-w-[425px]">
-            <DialogTitle className="text-lg font-bold mb-2 text-center ">Login</DialogTitle>
+            <DialogTitle className="text-xl font-bold mb-2 text-center ">Login</DialogTitle>
           <LoginPage />
         </DialogContent>
       </Dialog>
