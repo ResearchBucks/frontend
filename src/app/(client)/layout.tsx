@@ -1,3 +1,4 @@
+import Header from "@/components/landing/header";
 import Footer from "@/components/layout/footer/footer";
 import NavBar from "@/components/layout/navbar/navbar";
 import { BRAND } from "@/data/brand";
@@ -12,7 +13,8 @@ export default function ClientLayout({
 
   return (
     <div>
-      <NavBar navBarRoutes={navBarRoutes} brand={BRAND} />
+      {/* <NavBar navBarRoutes={navBarRoutes} brand={BRAND} /> */}
+      <Header />
       <main className="min-h-screen">{children}</main>
       <Footer footerRoutes={footerRoutes} brand={BRAND} />
     </div>

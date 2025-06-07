@@ -58,7 +58,7 @@ export default function NavBar({
   return (
     <>
       <header
-        className={`py-3 border-b-2 sticky z-50 top-0 bg-[var(--background-light)] transition-transform duration-300 ${
+        className={`py-3 border-b-2 sticky z-50 top-0 bg-white transition-transform duration-300 ${
           isVisible ? "translate-y-0" : "-translate-y-full"
         }`}
       >
@@ -70,6 +70,7 @@ export default function NavBar({
                 alt="ResearchBucks"
                 width={150}
                 height={150}
+                className="animate animate-pulse opacity-100"
               />
             </Link>
             <nav className="flex items-center">
