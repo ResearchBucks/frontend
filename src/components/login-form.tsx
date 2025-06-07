@@ -51,7 +51,7 @@ export function LoginForm() {
         <div className="flex flex-row items-center gap-2">
           <Input
             type="checkbox"
-            className="w-4"
+            className="w-4 accent-main cursor-pointer"
             value="researcher"
             checked={userLoginType === "researcher"}
             onChange={() =>setUserLoginType("researcher")}
@@ -61,7 +61,7 @@ export function LoginForm() {
         <div className="flex flex-row items-center gap-2">
         <Input
           type="checkbox"
-          className=" w-4"
+          className="w-4 accent-main cursor-pointer"
           value="respondent"
           checked={userLoginType === "respondent"}
           onChange={() =>setUserLoginType("respondent")}
@@ -125,6 +125,9 @@ export function LoginForm() {
         />
       </div>
     </form>
+    <div className="flex flex-row gap-2 justify-center pt-4 text-xs tracking-wide">
+      <p>Don't have an account?</p><span className="hover:font-medium hover:underline underline-offset-4 cursor-pointer hover:underline-main hover:text-main">SignUp</span>
+    </div>  
     </>
   );
 }
