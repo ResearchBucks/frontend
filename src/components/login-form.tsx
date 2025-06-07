@@ -19,6 +19,8 @@ type userLoginRes = {};
 export function LoginForm() {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
+  const [userLoginType, setUserLoginType] = useState<string>("researcher")
+
   const {
     register,
     handleSubmit,
@@ -30,7 +32,8 @@ export function LoginForm() {
   //the login submit function for user
   const onsubmit = async (data: userLoginDataTypes) => {
     try {
-      const res = await CustomAxios.post("admin/auth/login", data);
+     const endpoint= userLoginType === "researcher" ? "researcher/auth/login" :"respondent/auth/login"
+     const res = await CustomAxios.post(endpoint, data);
       if (res.status === 200) {
         dispatch(setAccessToken(res.data.data.token));
         console.log(res.data);
@@ -39,7 +42,7 @@ export function LoginForm() {
       console.log(err);
     }
   };
-  
+
   return (
     <>
     <div className="flex flex-col">
@@ -49,6 +52,9 @@ export function LoginForm() {
           <Input
             type="checkbox"
             className="w-4"
+            value="researcher"
+            checked={userLoginType === "researcher"}
+            onChange={() =>setUserLoginType("researcher")}
           />
           Researcher
         </div>
@@ -56,13 +62,16 @@ export function LoginForm() {
         <Input
           type="checkbox"
           className=" w-4"
+          value="respondent"
+          checked={userLoginType === "respondent"}
+          onChange={() =>setUserLoginType("respondent")}
         />
         Respondent       
       </div>
       </div>
     </div>
 
-    <form onSubmit={handleSubmit(onsubmit)} className="flex flex-col gap-4 pt-3">
+    <form onSubmit={handleSubmit(onsubmit)} className="flex flex-col gap-4 pt-3 text-sm">
       {/* the input field for email */}
       <div>
         <label>Email</label>
