@@ -27,7 +27,7 @@ export default function Header() {
     <div className="bg-white sticky top-0 z-50">
       {/* Modal */}
       <Dialog open={openModal} onOpenChange={setOpenModal}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className={`${modalView === "login" ? "sm:max-w-[425px]" : "sm:max-w-[550px]"}`}>
           <DialogTitle className="text-xl font-bold mb-2 text-center">
             {modalView === "login" ? "Login" : "Sign Up"}
           </DialogTitle>
