@@ -16,9 +16,9 @@ export function LoginForm({
       {/* the input fields and the login button */}
       <div className="grid gap-4 ">
         <div className="grid gap-4">
-          <Input id="email" type="email" placeholder="username" required icon={<img src={userloginImg} alt="user icon" className="w-5 h-6" />}/>
+          <Input id="email" type="email" placeholder="username" required  alt="user icon" className="w-5 h-6" />
           {/* <Input id="email" type="email" placeholder="m@example.com" required /> */}
-          <Input id="password" type="password" placeholder="password" required icon={<img src={loginpwImg} alt="pw icon" className= 'w-5 h-6' />} />
+          <Input id="password" type="password" placeholder="password" required  alt="pw icon" className= 'w-5 h-6'  />
         </div>
 
         <button type="submit" className="w-full bg-[var(--main-light)] rounded-md  cursor-pointer hover:bg-[var(--main-light)]/80 p-2 text-[var(--main-text-light)] mt-3">
