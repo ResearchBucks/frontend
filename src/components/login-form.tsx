@@ -16,7 +16,7 @@ import { useState } from "react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 
 type userLoginRes = {};
-export function LoginForm() {
+export function LoginForm({ onSwitch }: { onSwitch: () => void }) {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [userLoginType, setUserLoginType] = useState<string>("researcher")
@@ -126,7 +126,7 @@ export function LoginForm() {
       </div>
     </form>
     <div className="flex flex-row gap-2 justify-center pt-4 text-xs tracking-wide">
-      <p>Don't have an account?</p><span className="hover:font-medium hover:underline underline-offset-4 cursor-pointer hover:underline-main hover:text-main">SignUp</span>
+      <p>Don't have an account?</p><span className="hover:font-medium hover:underline underline-offset-4 cursor-pointer hover:underline-main hover:text-main" onClick={onSwitch}>SignUp</span>
     </div>  
     </>
   );
