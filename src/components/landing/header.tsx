@@ -8,7 +8,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import LoginPage from "@/app/login/page";
 
 export default function Header() {
-  const [showLogin, setShowLogin] = useState(false);
+  const [openModel, setOpenModel] = useState<string | null>(null);
 
   const navItems = [
     { title: "Home", href: "/" },
@@ -23,7 +23,7 @@ export default function Header() {
   return (
     <div className="bg-white sticky top-0 z-50">
       {/* Login Dialog */}
-      <Dialog open={showLogin} onOpenChange={setShowLogin}>
+      <Dialog open={openModel === "login"} onOpenChange={(open) => !open && setOpenModel(null)}>
         <DialogContent className="sm:max-w-[425px]">
           <LoginPage />
         </DialogContent>
@@ -48,7 +48,7 @@ export default function Header() {
             <li key={index}>
               {item.title === "Login" ? (
                 <button
-                  onClick={() => setShowLogin(true)}
+                  onClick={() => setOpenModel(item.title.toLowerCase())}
                   className="cursor-pointer hover:bg-main p-2 rounded-sm hover:text-maintext w-full text-left"
                 >
                   {item.title}
