@@ -1,10 +1,12 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   researcherSignupschema,
   researcherSignupDataTypes,
+  respondentSignupSchema,
+  respondentSignupDatatypes
 } from "@/schema/user/user-details";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CustomAxios from "../api/CustomAxios";
@@ -12,23 +14,41 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 
 export function SignUp({ onSwitch }: { onSwitch: () => void }) {
-  const [userLoginType, setUserLoginType] = useState<string | null>("researcher");
+  const [userLoginType, setUserLoginType] = useState<"researcher" | "respondent">("researcher");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPw, setShowConfrimPw] = useState<boolean>(false);
+
+
+  //getting the schems and types based on user Login types
+const {schema, endpoint} = useMemo(()=>{
+    if(userLoginType === "researcher"){
+        return{
+            schema: researcherSignupschema,
+            endpoint:"researcher/user/register"
+        }
+    }else{
+        return{
+            schema:respondentSignupSchema,
+            endpoint:"respondent/user/register"
+        }
+    }
+},[userLoginType])
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<researcherSignupDataTypes>({
-    resolver: zodResolver(researcherSignupschema),
+    reset,
+  } = useForm<researcherSignupDataTypes | respondentSignupDatatypes>({
+    resolver: zodResolver(schema),
   });
 
-  const onsubmit = async (data: researcherSignupDataTypes) => {
+  const onsubmit = async (data: researcherSignupDataTypes | respondentSignupDatatypes) => {
     try {
-      const res = await CustomAxios.post("researcher/user/register", data);
+      const res = await CustomAxios.post(endpoint, data);
       if (res.status === 200) {
         console.log(res.data);
+        reset();
       }
     } catch (err) {
       console.log(err);
@@ -101,20 +121,27 @@ export function SignUp({ onSwitch }: { onSwitch: () => void }) {
             )}
           </div>
 
-          {/* the occupation input field */}
-          <div className="flex flex-col">
-            <Input
-              type="text"
-              placeholder="Occupation"
-              {...register("occupation")}
-              className={errors.occupation ? "border border-error" : ""}
-            />
-            {errors.occupation && (
-              <span className="text-[10px] text-red-600">
-                {errors.occupation.message}
-              </span>
-            )}
-          </div>
+        {/* showing the occupation field if the user is a researcher */}
+        {userLoginType === "researcher" &&(
+            <>
+            {/* the occupation input field */}
+            <div className="flex flex-col">
+                <Input
+                type="text"
+                placeholder="Occupation"
+                {...register("occupation")}
+                className={errors.occupation ? "border border-error" : ""}
+                />
+                {errors.occupation && (
+                <span className="text-[10px] text-red-600">
+                    {errors.occupation?.message}
+                </span>
+                )}
+            </div>         
+            </>
+
+        )}
+
 
           {/* the email input field */}
           <div className="flex flex-col">
@@ -136,7 +163,7 @@ export function SignUp({ onSwitch }: { onSwitch: () => void }) {
             <Input
               type="number"
               placeholder="Contact "
-              {...register("mobile")}
+             {...register("mobile", { valueAsNumber: true })}
               className={errors.mobile ? "border border-error" : ""}
             />
             {errors.mobile && (
