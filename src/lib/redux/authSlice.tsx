@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface AuthState {
   userRole: string | null;
-  userId: string |null;
+  userId: string | number | null;
   userEmail: string | null;
   REFRESHTOKEN: string | null;
   ACCESSTOKEN: string | null;
@@ -11,8 +11,8 @@ interface AuthState {
 
 const initialState: AuthState = {
   userRole: null,
-  userId:null,
-  userEmail:null,
+  userId: null,
+  userEmail: null,
   REFRESHTOKEN: null,
   ACCESSTOKEN: null,
 };
@@ -24,7 +24,7 @@ export const authSlice = createSlice({
     setUserRole: (state, action: PayloadAction<string | null>) => {
       state.userRole = action.payload;
     },
-    setUserID:(state, action: PayloadAction<string | null>) => {
+    setUserID: (state, action: PayloadAction<string | number | null>) => {
       state.userId = action.payload;
     },
     setRefreshToken: (state, action: PayloadAction<string | null>) => {
@@ -33,12 +33,12 @@ export const authSlice = createSlice({
     setAccessToken: (state, action: PayloadAction<string | null>) => {
       state.ACCESSTOKEN = action.payload;
     },
-    setUserEmail:(state, action:PayloadAction<string | null>) =>{
-      state.userEmail = action.payload
+    setUserEmail: (state, action: PayloadAction<string | null>) => {
+      state.userEmail = action.payload;
     },
     clearAuth: (state) => {
       state.userRole = null;
-      state.userId =null
+      state.userId = null;
       state.userEmail = null;
       state.REFRESHTOKEN = null;
       state.ACCESSTOKEN = null;
