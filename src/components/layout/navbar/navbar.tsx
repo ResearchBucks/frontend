@@ -84,9 +84,9 @@ export default function NavBar({
           </div>
         </Container>
       </header>
-      <Modal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)}>
+      {/* <Modal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)}>
         <LoginPage />
-      </Modal>
+      </Modal> */}
     </>
   );
 }

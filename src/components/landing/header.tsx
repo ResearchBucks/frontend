@@ -1,13 +1,19 @@
 "use client";
 import Image from "next/image";
-import { logo } from "@/assests/assests";
 import Link from "next/link";
 import { useState } from "react";
-import { Dialog, DialogContent,DialogTitle} from "@/components/ui/dialog";
+import { logo } from "@/assests/assests";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import LoginPage from "@/app/login/page";
+import { SignUp } from "@/app/signup/page";
+
 
 export default function Header() {
-  const [openModel, setOpenModel] = useState<string | null>(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [modalView, setModalView] = useState<"login" | "signup">("login");
+
+  const handleSwitchToLogin = () => setModalView("login");
+  const handleSwitchToSignup = () => setModalView("signup");
 
   const navItems = [
     { title: "Home", href: "/" },
@@ -15,20 +21,25 @@ export default function Header() {
     { title: "Surveys", href: "/#surveys" },
     { title: "Researcher", href: "/#researcher" },
     { title: "About Us", href: "/#aboutus" },
-    { title: "Login", href: "#" },
-    { title: "Sign Up", href: "#signup" },
   ];
-
 
   return (
     <div className="bg-white sticky top-0 z-50">
-      <Dialog open={openModel === "login"} onOpenChange={(open) => !open && setOpenModel(null)}>
+      {/* Modal */}
+      <Dialog open={openModal} onOpenChange={setOpenModal}>
         <DialogContent className="sm:max-w-[425px]">
-            <DialogTitle className="text-xl font-bold mb-2 text-center ">Login</DialogTitle>
-          <LoginPage />
+          <DialogTitle className="text-xl font-bold mb-2 text-center">
+            {modalView === "login" ? "Login" : "Sign Up"}
+          </DialogTitle>
+          {modalView === "login" ? (
+            <LoginPage onSwitch={handleSwitchToSignup} />
+          ) : (
+            <SignUp onSwitch={handleSwitchToLogin} />
+          )}
         </DialogContent>
       </Dialog>
 
+      {/* Header content */}
       <div className="flex flex-row justify-between items-center px-6 py-3 max-w-[1440px] mx-auto">
         <Link href="/" className="flex items-center">
           <Image
@@ -44,20 +55,36 @@ export default function Header() {
         <ul className="flex flex-row gap-4 items-center">
           {navItems.map((item, index) => (
             <li key={index}>
-              {item.title === "Login" ? (
-                <button
-                  onClick={() => setOpenModel("login")}
-                  className="cursor-pointer hover:bg-main p-2 rounded-sm hover:text-maintext text-sm font-semibold"
-                >
-                  {item.title}
-                </button>
-              ) : (
-                <Link href={item.href} className="cursor-pointer hover:bg-main p-2 rounded-sm hover:text-maintext text-sm font-semibold">
-                  {item.title}
-                </Link>
-              )}
+              <Link
+                href={item.href}
+                className="cursor-pointer hover:bg-main p-2 rounded-sm hover:text-maintext text-sm font-semibold"
+              >
+                {item.title}
+              </Link>
             </li>
           ))}
+          <li>
+            <button
+              onClick={() => {
+                setModalView("login");
+                setOpenModal(true);
+              }}
+              className="cursor-pointer hover:bg-main p-2 rounded-sm hover:text-maintext text-sm font-semibold"
+            >
+              Login
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => {
+                setModalView("signup");
+                setOpenModal(true);
+              }}
+              className="cursor-pointer hover:bg-main p-2 rounded-sm hover:text-maintext text-sm font-semibold"
+            >
+              Sign Up
+            </button>
+          </li>
         </ul>
       </div>
     </div>
