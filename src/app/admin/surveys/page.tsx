@@ -6,7 +6,6 @@ export const metadata: Metadata = {
   title: "My Surveys | Dashboard",
 };
 
-// Mock data with proper Survey structure including questions
 const mockSurveys: Survey[] = [
   {
     id: "1",
@@ -364,7 +363,6 @@ export default async function SurveysPage(props: {
   const page = Number(searchParams?.page || "1");
   const size = Number(searchParams?.size || "12");
 
-  // Filter surveys based on search params
   let filteredSurveys = mockSurveys;
 
   if (query) {
@@ -381,7 +379,6 @@ export default async function SurveysPage(props: {
     );
   }
 
-  // Pagination
   const startIndex = (page - 1) * size;
   const endIndex = startIndex + size;
   const paginatedSurveys = filteredSurveys.slice(startIndex, endIndex);
