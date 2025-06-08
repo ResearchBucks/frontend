@@ -44,6 +44,9 @@ export default function ForgotPassword({ userLoginType,onClose }: ForgotPassword
     } catch (err) {
       toast.error("An Error occured")
       console.log(err);
+      setTimeout(()=>{
+          onClose()
+        },2000)
     }
   };
   const handleUserTypeChange = (type: string) => {
