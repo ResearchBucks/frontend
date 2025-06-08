@@ -36,7 +36,7 @@ export default function ResetPassword() {
   const onsubmit = async (data: passwordResetDataTypes) => {
     const Newdata = { token, password: data.password };
     const endpoint =
-      role === "researcher"
+      role === "ROLE_RESEARCHER"
         ? "researcher/auth/resetPassword"
         : "respondent/auth/resetPassword";
     try {
