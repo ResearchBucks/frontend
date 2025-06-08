@@ -6,7 +6,7 @@ import { SignUp } from "../page";
 interface SignupPageProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  setModalType: (type: "login" | "signup" | "reset" | null) => void;
+  setModalType: (type: "login" | "signup" | null) => void;
 }
 
 export default function SignupPage({ open, onOpenChange,setModalType}:SignupPageProps){

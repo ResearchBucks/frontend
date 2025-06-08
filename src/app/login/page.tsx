@@ -4,7 +4,13 @@ import { useState } from "react";
 import ResetRequest from "../passwordReset/resetRequest/page";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
-export default function LoginPage({ open, onOpenChange, setModalType}) {
+interface LoginPageProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  setModalType: (type: "login" | "signup" | "reset" | null) => void;
+}
+
+export default function LoginPage({ open, onOpenChange, setModalType}:LoginPageProps) {
 
   return (
     <>
