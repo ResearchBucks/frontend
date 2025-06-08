@@ -1,197 +1,277 @@
 "use client";
 
 import React from "react";
+import { Question } from "@/types/surveys/surveys";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Star } from "lucide-react";
-import { Question } from "@/types/surveys/surveys";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface QuestionFieldProps {
   question: Question;
   value: any;
   onChange: (value: any) => void;
+  isViewMode?: boolean;
 }
 
 export function QuestionField({
   question,
   value,
   onChange,
+  isViewMode = false,
 }: QuestionFieldProps) {
-  const renderSingleSelect = () => (
-    <RadioGroup
-      value={value || ""}
-      onValueChange={onChange}
-      className="space-y-3"
-    >
-      {question.options.map((option) => (
-        <div key={option.id} className="flex items-center space-x-3">
-          <RadioGroupItem value={option.text} id={option.id} />
-          <Label htmlFor={option.id} className="flex-1 cursor-pointer">
-            <div>
-              <span className="text-sm font-medium text-gray-900">
-                {option.text}
-              </span>
-              {option.sinhalaText && (
-                <p className="text-xs text-gray-600 italic mt-1">
-                  {option.sinhalaText}
-                </p>
-              )}
-            </div>
-          </Label>
-        </div>
-      ))}
-    </RadioGroup>
-  );
+  const handleMultiSelectChange = (optionId: string, checked: boolean) => {
+    if (isViewMode) return;
 
-  const renderMultiSelect = () => {
-    const selectedValues = Array.isArray(value) ? value : [];
+    const currentValue = Array.isArray(value) ? value : [];
+    if (checked) {
+      onChange([...currentValue, optionId]);
+    } else {
+      onChange(currentValue.filter((id: string) => id !== optionId));
+    }
+  };
 
-    const handleCheckboxChange = (optionText: string, checked: boolean) => {
-      if (checked) {
-        onChange([...selectedValues, optionText]);
-      } else {
-        onChange(selectedValues.filter((v: string) => v !== optionText));
-      }
-    };
+  const handleRatingChange = (rating: number) => {
+    if (isViewMode) return;
+    onChange(rating);
+  };
+
+  const getViewModeDisplay = () => {
+    if (!isViewMode) return null;
 
     return (
-      <div className="space-y-3">
-        {question.options.map((option) => (
-          <div key={option.id} className="flex items-center space-x-3">
-            <Checkbox
-              id={option.id}
-              checked={selectedValues.includes(option.text)}
-              onCheckedChange={(checked) =>
-                handleCheckboxChange(option.text, checked as boolean)
-              }
-            />
-            <Label htmlFor={option.id} className="flex-1 cursor-pointer">
-              <div>
-                <span className="text-sm font-medium text-gray-900">
-                  {option.text}
-                </span>
-                {option.sinhalaText && (
-                  <p className="text-xs text-gray-600 italic mt-1">
-                    {option.sinhalaText}
-                  </p>
-                )}
-              </div>
-            </Label>
-          </div>
-        ))}
+      <div className="mt-3 p-3 bg-gray-100 rounded-lg">
+        <p className="text-sm text-gray-600 italic">
+          Preview mode - interactions disabled
+        </p>
       </div>
     );
   };
-
-  const renderYesNo = () => (
-    <RadioGroup
-      value={value || ""}
-      onValueChange={onChange}
-      className="flex gap-6"
-    >
-      {question.options.map((option) => (
-        <div key={option.id} className="flex items-center space-x-2">
-          <RadioGroupItem value={option.text} id={option.id} />
-          <Label htmlFor={option.id} className="cursor-pointer">
-            <span className="text-sm font-medium text-gray-900">
-              {option.text}
-            </span>
-            {option.sinhalaText && (
-              <span className="text-xs text-gray-600 italic ml-2">
-                ({option.sinhalaText})
-              </span>
-            )}
-          </Label>
-        </div>
-      ))}
-    </RadioGroup>
-  );
-
-  const renderText = () => (
-    <Input
-      value={value || ""}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder="Enter your answer"
-      className="w-full"
-    />
-  );
-
-  const renderTextarea = () => (
-    <Textarea
-      value={value || ""}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder="Enter your detailed answer"
-      className="w-full min-h-[100px] resize-none"
-      rows={4}
-    />
-  );
-
-  const renderRating = () => {
-    const rating = parseInt(value) || 0;
-
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-center gap-2">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <Button
-              key={star}
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => onChange(star.toString())}
-              className={`p-2 hover:bg-gray-100 ${
-                star <= rating ? "text-yellow-500" : "text-gray-300"
-              }`}
-            >
-              <Star
-                className={`h-8 w-8 ${star <= rating ? "fill-current" : ""}`}
-              />
-            </Button>
-          ))}
-        </div>
-        <div className="flex justify-between text-xs text-gray-500 px-2">
-          <span>Poor</span>
-          <span>Excellent</span>
-        </div>
-        {rating > 0 && (
-          <p className="text-center text-sm text-gray-700">
-            You selected: {rating} star{rating !== 1 ? "s" : ""}
-          </p>
-        )}
-      </div>
-    );
-  };
-
-  const renderNumber = () => (
-    <Input
-      type="number"
-      value={value || ""}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder="Enter a number"
-      className="w-full"
-    />
-  );
 
   switch (question.type) {
     case "single_select":
-      return renderSingleSelect();
+      return (
+        <div className="space-y-3">
+          <RadioGroup
+            value={value || ""}
+            onValueChange={isViewMode ? undefined : onChange}
+            className="space-y-2"
+          >
+            {question.options.map((option) => (
+              <div key={option.id} className="flex items-center space-x-2">
+                <RadioGroupItem
+                  value={option.id}
+                  id={option.id}
+                  disabled={isViewMode}
+                  className={isViewMode ? "opacity-50" : ""}
+                />
+                <Label
+                  htmlFor={option.id}
+                  className={`text-sm ${
+                    isViewMode ? "text-gray-500" : "text-gray-700"
+                  }`}
+                >
+                  {option.text}
+                  {option.sinhalaText && (
+                    <span className="text-gray-500 italic ml-2">
+                      ({option.sinhalaText})
+                    </span>
+                  )}
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+          {getViewModeDisplay()}
+        </div>
+      );
+
     case "multi_select":
-      return renderMultiSelect();
+      return (
+        <div className="space-y-3">
+          <div className="space-y-2">
+            {question.options.map((option) => (
+              <div key={option.id} className="flex items-center space-x-2">
+                <Checkbox
+                  id={option.id}
+                  checked={Array.isArray(value) && value.includes(option.id)}
+                  onCheckedChange={(checked) =>
+                    handleMultiSelectChange(option.id, checked as boolean)
+                  }
+                  disabled={isViewMode}
+                  className={isViewMode ? "opacity-50" : ""}
+                />
+                <Label
+                  htmlFor={option.id}
+                  className={`text-sm ${
+                    isViewMode ? "text-gray-500" : "text-gray-700"
+                  }`}
+                >
+                  {option.text}
+                  {option.sinhalaText && (
+                    <span className="text-gray-500 italic ml-2">
+                      ({option.sinhalaText})
+                    </span>
+                  )}
+                </Label>
+              </div>
+            ))}
+          </div>
+          {getViewModeDisplay()}
+        </div>
+      );
+
     case "yes_no":
-      return renderYesNo();
+      return (
+        <div className="space-y-3">
+          <RadioGroup
+            value={value || ""}
+            onValueChange={isViewMode ? undefined : onChange}
+            className="flex space-x-6"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem
+                value="yes"
+                id="yes"
+                disabled={isViewMode}
+                className={isViewMode ? "opacity-50" : ""}
+              />
+              <Label
+                htmlFor="yes"
+                className={`text-sm ${
+                  isViewMode ? "text-gray-500" : "text-gray-700"
+                }`}
+              >
+                Yes
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem
+                value="no"
+                id="no"
+                disabled={isViewMode}
+                className={isViewMode ? "opacity-50" : ""}
+              />
+              <Label
+                htmlFor="no"
+                className={`text-sm ${
+                  isViewMode ? "text-gray-500" : "text-gray-700"
+                }`}
+              >
+                No
+              </Label>
+            </div>
+          </RadioGroup>
+          {getViewModeDisplay()}
+        </div>
+      );
+
     case "text":
-      return renderText();
+      return (
+        <div className="space-y-3">
+          <Input
+            type="text"
+            value={value || ""}
+            onChange={(e) => !isViewMode && onChange(e.target.value)}
+            placeholder={isViewMode ? "Short text answer" : "Enter your answer"}
+            className={`w-full ${
+              isViewMode ? "bg-gray-100 text-gray-500" : ""
+            }`}
+            disabled={isViewMode}
+          />
+          {getViewModeDisplay()}
+        </div>
+      );
+
     case "textarea":
-      return renderTextarea();
-    case "rating":
-      return renderRating();
+      return (
+        <div className="space-y-3">
+          <Textarea
+            value={value || ""}
+            onChange={(e) => !isViewMode && onChange(e.target.value)}
+            placeholder={
+              isViewMode ? "Long text answer" : "Enter your detailed answer"
+            }
+            className={`w-full min-h-[100px] ${
+              isViewMode ? "bg-gray-100 text-gray-500" : ""
+            }`}
+            disabled={isViewMode}
+          />
+          {getViewModeDisplay()}
+        </div>
+      );
+
     case "number":
-      return renderNumber();
+      return (
+        <div className="space-y-3">
+          <Input
+            type="number"
+            value={value || ""}
+            onChange={(e) => !isViewMode && onChange(e.target.value)}
+            placeholder={isViewMode ? "Numeric answer" : "Enter a number"}
+            className={`w-full ${
+              isViewMode ? "bg-gray-100 text-gray-500" : ""
+            }`}
+            disabled={isViewMode}
+          />
+          {getViewModeDisplay()}
+        </div>
+      );
+
+    case "rating":
+      return (
+        <div className="space-y-3">
+          <div className="flex items-center space-x-1">
+            {[1, 2, 3, 4, 5].map((rating) => (
+              <Button
+                key={rating}
+                type="button"
+                variant="ghost"
+                size="sm"
+                className={`p-1 h-auto ${
+                  isViewMode ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                onClick={() => handleRatingChange(rating)}
+                disabled={isViewMode}
+              >
+                <Star
+                  className={`h-6 w-6 ${
+                    value >= rating
+                      ? "fill-yellow-400 text-yellow-400"
+                      : "text-gray-300"
+                  }`}
+                />
+              </Button>
+            ))}
+            <span
+              className={`ml-2 text-sm ${
+                isViewMode ? "text-gray-500" : "text-gray-600"
+              }`}
+            >
+              {value ? `${value}/5` : "Rate from 1 to 5"}
+            </span>
+          </div>
+          {getViewModeDisplay()}
+        </div>
+      );
+
     default:
-      return <div className="text-red-500">Unsupported question type</div>;
+      return (
+        <div className="space-y-3">
+          <Input
+            type="text"
+            value={value || ""}
+            onChange={(e) => !isViewMode && onChange(e.target.value)}
+            placeholder={isViewMode ? "Text answer" : "Enter your answer"}
+            className={`w-full ${
+              isViewMode ? "bg-gray-100 text-gray-500" : ""
+            }`}
+            disabled={isViewMode}
+          />
+          {getViewModeDisplay()}
+        </div>
+      );
   }
 }
