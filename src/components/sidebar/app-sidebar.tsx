@@ -15,12 +15,7 @@ import { BRAND } from "@/data/brand";
 import Image from "next/image";
 import { availableNavMainRoutes } from "@/data/routes/admin-routes";
 import { UserRoles } from "@/enum/user";
-
-const user = {
-  name: "shadcn",
-  email: "m@example.com",
-  avatar: "/avatars/shadcn.jpg",
-};
+import { useAppSelector } from "@/lib/redux/hooks";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
   role: UserRoles;
@@ -28,6 +23,36 @@ type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
 
 export function AppSidebar({ role, ...props }: AppSidebarProps) {
   const { open } = useSidebar();
+
+  const userEmail = useAppSelector((state) => state.auth.userEmail);
+  const userRole = useAppSelector((state) => state.auth.userRole);
+  const userId = useAppSelector((state) => state.auth.userId);
+
+  const user = {
+    name: userEmail?.split("@")[0] || "User",
+    email: userEmail || "user@example.com",
+    avatar: "/avatars/default-avatar.jpg",
+  };
+
+  const getDisplayName = (email: string | null, role: string | null) => {
+    if (!email) return "User";
+
+    const namePart = email.split("@")[0];
+
+    const formattedName = namePart
+      .replace(/[._]/g, " ")
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
+    return formattedName;
+  };
+
+  const enhancedUser = {
+    name: getDisplayName(userEmail, userRole),
+    email: userEmail || "user@example.com",
+    avatar: "/avatars/default-avatar.jpg",
+  };
 
   return (
     <Sidebar collapsible="icon" {...props} className="bg-[var(--main-light)]">
@@ -46,7 +71,7 @@ export function AppSidebar({ role, ...props }: AppSidebarProps) {
         <NavMain items={availableNavMainRoutes(role)} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} />
+        <NavUser user={enhancedUser} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
