@@ -1,5 +1,6 @@
 "use client";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import ForgotPassword from "./forgotPassword";
 
 interface ResetRequestProps {
   open: boolean;
@@ -13,7 +14,7 @@ export default function ResetRequest({ open, onOpenChange }: ResetRequestProps) 
         <DialogTitle className="text-xl font-bold mb-2 text-center">
           Reset Password
         </DialogTitle>
-        {/* Your reset password form content here */}
+        <ForgotPassword />
       </DialogContent>
     </Dialog>
   );
