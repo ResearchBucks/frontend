@@ -5,6 +5,7 @@ import ForgotPassword from "./forgotPassword";
 interface ResetRequestProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  userLoginType:string;
 }
 
 export default function ResetRequest({ open, onOpenChange }: ResetRequestProps) {
@@ -14,7 +15,7 @@ export default function ResetRequest({ open, onOpenChange }: ResetRequestProps) 
         <DialogTitle className="text-xl font-bold mb-2 text-center">
           Reset Password
         </DialogTitle>
-        <ForgotPassword />
+        <ForgotPassword userLoginType={userLoginType}/>
       </DialogContent>
     </Dialog>
   );
