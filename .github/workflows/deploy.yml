@@ -65,10 +65,10 @@ jobs:
           
             docker pull $IMAGE_NAME:latest
             echo "Stopping existing container (if exists)..."
-            docker stop research-bucks-f 2>/dev/null || echo "No existing container to stop"
+            docker stop research-bucks-fe 2>/dev/null || echo "No existing container to stop"
 
             echo "Removing existing container (if exists)..."
-            docker rm research-bucks-f 2>/dev/null || echo "No existing container to remove"
+            docker rm research-bucks-fe 2>/dev/null || echo "No existing container to remove"
 
             docker run -d -p 80:3000 --name research-bucks-fe $IMAGE_NAME:latest
 
