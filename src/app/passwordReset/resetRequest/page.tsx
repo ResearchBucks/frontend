@@ -1,8 +1,10 @@
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { useState } from "react";
 
-export default function ResetRequest({ onClose }: { onClose: () => void }) {
+export default function ResetRequest() {
+    const [open, onOpenChange] = useState(false)
   return (
-    <Dialog open onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogTitle className="text-xl font-bold mb-2 text-center">Reset Password</DialogTitle>
         {/* Your reset form content */}

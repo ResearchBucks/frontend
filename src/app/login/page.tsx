@@ -11,7 +11,7 @@ export default function LoginPage({ open, onOpenChange, setModalType}) {
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent>
           <DialogTitle className="text-xl font-bold mb-2 text-center">Login</DialogTitle>
-          <LoginForm setModalType={setModalType}/>
+          <LoginForm setModalType={setModalType} onClose={()=>onOpenChange(false)}/>
         </DialogContent>
       </Dialog>
     </>

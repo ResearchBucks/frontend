@@ -4,7 +4,6 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { SignUp } from "../page";
 
 export default function SignupPage({ open, onOpenChange,setModalType}){
-   const [openModal, setOpenModal] = useState(true);
    
      return (
        <>
