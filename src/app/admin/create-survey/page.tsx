@@ -131,7 +131,7 @@ export default function CreateSurveyPage() {
 
       if (response.status === 200 || response.status === 201) {
         toast.success("Survey created successfully!");
-        router.push("/admin/surveys");
+        router.push("/admin/my-surveys");
       } else {
         toast.error("Failed to create survey. Please try again.");
       }
