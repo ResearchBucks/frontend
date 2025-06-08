@@ -1,4 +1,4 @@
-name: Build and Deploy to ECS
+name: Deploy to Azure VM (Dev)
 
 on:
   push:
@@ -28,6 +28,11 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Create .env file dynamically
+        run: |
+          echo "NEXT_PUBLIC_API_BASE=http://${{ secrets.AZURE_VM_IP }}:8060/" > .env
+          cat .env
+  
       - name: Build Docker image
         run: |
           docker build -t $IMAGE_NAME:latest .
@@ -39,22 +44,25 @@ jobs:
 
 
   deploy:
-    name: Force New Deployment in ECS
-    needs: build-and-push
+    name: Deploy Docker Image on Azure VM
     runs-on: ubuntu-latest
     environment: Dev
 
     steps:
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Force new deployment with same task definition
-        run: |
-          aws ecs update-service \
-            --cluster ${{ secrets.ECS_CLUSTER }} \
-            --service ${{ secrets.ECS_SERVICE }} \
-            --force-new-deployment
+      - name: Deploy to Azure VM via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.AZURE_VM_IP }}
+          username: azureuser
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            docker pull $IMAGE_NAME:latest
+            docker stop your-container-name || true
+            docker rm your-container-name || true
+            docker run -d -p 80:3000 --name your-container-name $IMAGE_NAME:latest
+
+
