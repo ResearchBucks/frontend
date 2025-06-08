@@ -8,8 +8,7 @@ import LoginPage from "@/app/login/page";
 import SignupPage from "@/app/signup/signupPage/page";
 
 export default function Header() {
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showSignupModal, setShowSignupModal] = useState(false)
+ const [modalType, setModalType] = useState<"login" | "signup" |null>(null);
 
   const navItems = [
     { title: "Home", href: "/" },
@@ -17,9 +16,11 @@ export default function Header() {
     { title: "Surveys", href: "/#surveys" },
     { title: "Researcher", href: "/#researcher" },
     { title: "About Us", href: "/#aboutus" },
-    { title: "Login", href: "#", onClick: () => setShowLoginModal(true) },
-    { title: "Signup", href: "#", onClick: () => setShowSignupModal(true) },
+    { title: "Login", href: "#", onClick: () => setModalType("login") },
+    { title: "Signup", href: "#", onClick: () => setModalType("signup") },
   ];
+
+  const closeModal = () => setModalType(null);
 
   return (
     <div className="bg-white sticky top-0 z-50">
@@ -58,8 +59,8 @@ export default function Header() {
           ))}
         </ul>
       </div>
-      {showLoginModal && <LoginPage />}
-      {showSignupModal && <SignupPage />}
+      {modalType === "login" && (<LoginPage /> )} 
+    {modalType === "signup" && (<SignupPage /> )}
     </div>
   );
 }
