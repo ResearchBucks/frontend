@@ -89,7 +89,6 @@ export default function Header() {
           </li>
         </ul>
       </div>
-      {showResetRequest && <ResetRequest />}
     </div>
   );
 }
