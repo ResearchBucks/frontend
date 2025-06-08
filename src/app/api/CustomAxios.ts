@@ -4,7 +4,7 @@ import { clearAuth } from "@/lib/redux/authSlice";
 
 const CustomAxios = axios.create({
   baseURL:process.env.NEXT_PUBLIC_API_BASE,
-  timeout:10000,
+  // timeout:10000,
 });
 
 // Add access token to request headers

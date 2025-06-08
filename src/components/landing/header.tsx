@@ -6,11 +6,13 @@ import { logo } from "@/assests/assests";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import LoginPage from "@/app/login/page";
 import { SignUp } from "@/app/signup/page";
+import ResetRequest from "@/app/passwordReset/resetRequest/page";
 
 
 export default function Header() {
   const [openModal, setOpenModal] = useState(false);
   const [modalView, setModalView] = useState<"login" | "signup">("login");
+  const [showResetRequest, setShowResetRequest] = useState(false);
 
   const handleSwitchToLogin = () => setModalView("login");
   const handleSwitchToSignup = () => setModalView("signup");
@@ -32,7 +34,7 @@ export default function Header() {
             {modalView === "login" ? "Login" : "Sign Up"}
           </DialogTitle>
           {modalView === "login" ? (
-            <LoginPage onSwitch={handleSwitchToSignup} />
+            <LoginPage onSwitch={handleSwitchToSignup} onCloseModal={()=>setOpenModal(false)} />
           ) : (
             <SignUp onSwitch={handleSwitchToLogin} />
           )}
@@ -87,6 +89,7 @@ export default function Header() {
           </li>
         </ul>
       </div>
+      {showResetRequest && <ResetRequest />}
     </div>
   );
 }

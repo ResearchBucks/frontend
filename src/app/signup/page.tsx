@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import CustomAxios from "../api/CustomAxios";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export function SignUp({ onSwitch }: { onSwitch: () => void }) {
   const [userLoginType, setUserLoginType] = useState<
@@ -52,8 +53,10 @@ export function SignUp({ onSwitch }: { onSwitch: () => void }) {
         console.log(res.data);
         reset();
       }
-    } catch (err) {
-      console.log(err);
+    } catch (err:any) {
+        if(err.response?.status === 401)
+            toast.error("Already registered")
+            console.log(err);
     }
   };
 

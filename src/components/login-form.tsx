@@ -14,9 +14,10 @@ import CustomAxios from "@/app/api/CustomAxios";
 import { setAccessToken } from "@/lib/redux/authSlice";
 import { useState } from "react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import ResetRequest from "@/app/passwordReset/resetRequest/page";
 
 type userLoginRes = {};
-export function LoginForm({ onSwitch }: { onSwitch: () => void }) {
+export function LoginForm({ onSwitch, onForgotPassword}: { onSwitch: () => void; onForgotPassword:() =>void }) {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [userLoginType, setUserLoginType] = useState<string>("researcher")
@@ -108,7 +109,7 @@ export function LoginForm({ onSwitch }: { onSwitch: () => void }) {
           </span>
         )}
         <div className="flex flex-row justify-end pt-1">
-          <p className="text-[.7rem] cursor-pointer hover:text-main hover:font-medium ">
+          <p className="text-[.7rem] cursor-pointer hover:text-main hover:font-medium" onClick={onForgotPassword}>
             Forgot Password ?
           </p>
         </div>
