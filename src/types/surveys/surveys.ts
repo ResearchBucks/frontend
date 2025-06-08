@@ -45,31 +45,6 @@ export type QuestionType =
   | "rating"
   | "number";
 
-export interface QuestionOption {
-  id: string;
-  text: string;
-  sinhalaText?: string;
-}
-
-export interface Question {
-  id: string;
-  text: string;
-  sinhalaText?: string;
-  type: QuestionType;
-  options: QuestionOption[];
-  required: boolean;
-  order: number;
-}
-
-export interface SurveyForm {
-  id?: string;
-  title: string;
-  description: string;
-  questions: Question[];
-  createdAt?: string;
-  updatedAt?: string;
-}
-
 export const questionTypeOptions = [
   { value: "single_select", label: "Single Select" },
   { value: "multi_select", label: "Multi Select" },
