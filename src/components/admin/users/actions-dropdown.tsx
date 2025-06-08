@@ -10,12 +10,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import { Dialog } from "@/components/ui/dialog";
-import { IUser } from "@/types/user/users";
 import DeleteConfirmDialogConent from "@/components/dialog/user/delete-confirm";
 import UserFormDialog from "@/components/dialog/user/user-form-dialog";
+import { AdminUser } from "@/types/user/users";
 
 interface ActionsDropDownProps {
-  user: IUser;
+  user: AdminUser;
 }
 
 export default function ActionsDropDown({ user }: ActionsDropDownProps) {
@@ -57,7 +57,7 @@ export default function ActionsDropDown({ user }: ActionsDropDownProps) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Dialog open={isUpdateOpen} onOpenChange={setIsUpdateOpen}>
+      {/* <Dialog open={isUpdateOpen} onOpenChange={setIsUpdateOpen}>
         <UserFormDialog setOpen={() => setIsUpdateOpen(false)} user={user} />
       </Dialog>
 
@@ -66,7 +66,7 @@ export default function ActionsDropDown({ user }: ActionsDropDownProps) {
           user={user}
           onSuccess={() => setIsDeleteConfirmOpen(false)}
         />
-      </Dialog>
+      </Dialog> */}
     </>
   );
 }
