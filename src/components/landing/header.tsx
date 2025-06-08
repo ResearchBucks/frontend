@@ -3,19 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { logo } from "@/assests/assests";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import LoginPage from "@/app/login/page";
-import { SignUp } from "@/app/signup/page";
-import ResetRequest from "@/app/passwordReset/resetRequest/page";
 
+import SignupPage from "@/app/signup/signupPage/page";
 
 export default function Header() {
-  const [openModal, setOpenModal] = useState(false);
-  const [modalView, setModalView] = useState<"login" | "signup">("login");
-  const [showResetRequest, setShowResetRequest] = useState(false);
-
-  const handleSwitchToLogin = () => setModalView("login");
-  const handleSwitchToSignup = () => setModalView("signup");
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false)
 
   const navItems = [
     { title: "Home", href: "/" },
@@ -23,25 +17,12 @@ export default function Header() {
     { title: "Surveys", href: "/#surveys" },
     { title: "Researcher", href: "/#researcher" },
     { title: "About Us", href: "/#aboutus" },
-    
+    { title: "Login", href: "#", onClick: () => setShowLoginModal(true) },
+    { title: "Signup", href: "#", onClick: () => setShowSignupModal(true) },
   ];
 
   return (
     <div className="bg-white sticky top-0 z-50">
-      {/* Modal */}
-      <Dialog open={openModal} onOpenChange={setOpenModal}>
-        <DialogContent className={`${modalView === "login" ? "sm:max-w-[425px]" : "sm:max-w-[550px]"}`}>
-          <DialogTitle className="text-xl font-bold mb-2 text-center">
-            {modalView === "login" ? "Login" : "Sign Up"}
-          </DialogTitle>
-          {modalView === "login" ? (
-            <LoginPage onSwitch={handleSwitchToSignup} onCloseModal={()=>setOpenModal(false)} />
-          ) : (
-            <SignUp onSwitch={handleSwitchToLogin} />
-          )}
-        </DialogContent>
-      </Dialog>
-
       {/* Header content */}
       <div className="flex flex-row justify-between items-center px-6 py-3 max-w-[1440px] mx-auto">
         <Link href="/" className="flex items-center">
@@ -58,38 +39,27 @@ export default function Header() {
         <ul className="flex flex-row gap-4 items-center">
           {navItems.map((item, index) => (
             <li key={index}>
-              <Link
-                href={item.href}
-                className="cursor-pointer hover:bg-main p-2 rounded-sm hover:text-maintext text-sm font-semibold"
-              >
-                {item.title}
-              </Link>
+              {item.onClick ? (
+                <button
+                  onClick={item.onClick}
+                  className="cursor-pointer hover:bg-main p-2 rounded-sm hover:text-maintext text-sm font-semibold"
+                >
+                  {item.title}
+                </button>
+              ) : (
+                <Link
+                  href={item.href}
+                  className="cursor-pointer hover:bg-main p-2 rounded-sm hover:text-maintext text-sm font-semibold"
+                >
+                  {item.title}
+                </Link>
+              )}
             </li>
           ))}
-          <li>
-            <button
-              onClick={() => {
-                setModalView("login");
-                setOpenModal(true);
-              }}
-              className="cursor-pointer hover:bg-main p-2 rounded-sm hover:text-maintext text-sm font-semibold"
-            >
-              Login
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => {
-                setModalView("signup");
-                setOpenModal(true);
-              }}
-              className="cursor-pointer hover:bg-main p-2 rounded-sm hover:text-maintext text-sm font-semibold"
-            >
-              Sign Up
-            </button>
-          </li>
         </ul>
       </div>
+      {showLoginModal && <LoginPage />}
+      {showSignupModal && <SignupPage />}
     </div>
   );
 }

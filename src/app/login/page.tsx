@@ -4,22 +4,17 @@ import { useState } from "react";
 import ResetRequest from "../passwordReset/resetRequest/page";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
-export default function LoginPage({ onSwitch, onCloseModal }: { onSwitch: () => void; onCloseModal: () => void }) {
-  const [showResetModal, setShowResetModal] = useState(false);
+export default function LoginPage() {
+  const [openModal, setOpenModal] = useState(true);
 
   return (
     <>
-      <div className="flex flex-1 items-center justify-center">
-        <div className="w-full max-w-xs">
-          <LoginForm
-            onSwitch={onSwitch}
-            onForgotPassword={() => setShowResetModal(true)}
-          />
-        </div>
-      </div>
-
-{showResetModal && <ResetRequest onClose={() => setShowResetModal(false)} />}
-
+      <Dialog open={openModal} onOpenChange={setOpenModal}>
+        <DialogContent>
+          <DialogTitle className="text-xl font-bold mb-2 text-center">Login</DialogTitle>
+          <LoginForm/>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

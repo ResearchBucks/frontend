@@ -14,7 +14,7 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-export function SignUp({ onSwitch }: { onSwitch: () => void }) {
+export function SignUp() {
   const [userLoginType, setUserLoginType] = useState<
     "researcher" | "respondent"
   >("researcher");
@@ -271,7 +271,7 @@ export function SignUp({ onSwitch }: { onSwitch: () => void }) {
           Already have an account?{" "}
           <span
             className="font-medium hover:underline hover:text-main cursor-pointer"
-            onClick={onSwitch}
+          
           >
             Login
           </span>
