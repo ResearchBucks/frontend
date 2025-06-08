@@ -60,6 +60,7 @@ jobs:
           username: azureuser
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
+          envs: IMAGE_NAME
           script: |
             docker pull $IMAGE_NAME:latest
             echo "Stopping existing container (if exists)..."
