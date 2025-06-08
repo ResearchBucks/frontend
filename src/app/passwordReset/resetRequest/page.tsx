@@ -15,7 +15,7 @@ export default function ResetRequest({ open, onOpenChange,  userLoginType }: Res
         <DialogTitle className="text-xl font-bold mb-2 text-center">
           Reset Password
         </DialogTitle>
-        <ForgotPassword userLoginType={userLoginType}/>
+        <ForgotPassword userLoginType={userLoginType} onClose={()=>onOpenChange(false)}/>
       </DialogContent>
     </Dialog>
   );

@@ -11,8 +11,9 @@ import { toast } from "sonner";
 
 interface ForgotPasswordProps {
   userLoginType: string;
+  onClose:()=>void;
 }
-export default function ForgotPassword({ userLoginType }: ForgotPasswordProps) {
+export default function ForgotPassword({ userLoginType,onClose }: ForgotPasswordProps) {
   const [localUserType, setLocalUserType] = useState(userLoginType);
   const emailSchema = z.object({
     email: z.string().email(),
@@ -36,6 +37,9 @@ export default function ForgotPassword({ userLoginType }: ForgotPasswordProps) {
       if (res.status === 200) {
         toast.success("Password Reset Email Send successfully")
         console.log(res.data);
+        setTimeout(()=>{
+          onClose()
+        },2000)
       }
     } catch (err) {
       toast.error("An Error occured")
