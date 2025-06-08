@@ -63,12 +63,14 @@ const [open, onOpenChange] = useState(false)
         <LoginPage 
             open={modalType === "login"} 
             onOpenChange={(open) => !open && setModalType(null)} 
+            setModalType={setModalType} 
         />
         )}
                {modalType === "signup" && (
         <SignupPage 
             open={modalType === "signup"} 
             onOpenChange={(open) => !open && setModalType(null)} 
+            setModalType={setModalType} 
         />
         )}
     </div>

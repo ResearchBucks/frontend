@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { SignUp } from "../page";
 
-export default function SignupPage({ open, onOpenChange }){
+export default function SignupPage({ open, onOpenChange,setModalType}){
    const [openModal, setOpenModal] = useState(true);
    
      return (
@@ -11,7 +11,7 @@ export default function SignupPage({ open, onOpenChange }){
          <Dialog open={open} onOpenChange={onOpenChange}>
            <DialogContent>
              <DialogTitle className="text-xl font-bold mb-2 text-center">SignUp</DialogTitle>
-             <SignUp />
+             <SignUp setModalType={setModalType}/>
            </DialogContent>
          </Dialog>
        </>

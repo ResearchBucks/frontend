@@ -16,8 +16,10 @@ import { useState } from "react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import ResetRequest from "@/app/passwordReset/resetRequest/page";
 
-type userLoginRes = {};
-export function LoginForm() {
+type LoginFormProps = {
+  setModalType: (type: "login" | "signup" | null) => void;
+};
+export function LoginForm({setModalType} :LoginFormProps) {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [userLoginType, setUserLoginType] = useState<string>("researcher")
@@ -127,7 +129,7 @@ export function LoginForm() {
       </div>
     </form>
     <div className="flex flex-row gap-2 justify-center pt-4 text-xs tracking-wide">
-      <p>Don't have an account?</p><span className="hover:font-medium hover:underline underline-offset-4 cursor-pointer hover:underline-main hover:text-main">SignUp</span>
+      <p>Don't have an account?</p><span className="hover:font-medium hover:underline underline-offset-4 cursor-pointer hover:underline-main hover:text-main" onClick={()=>setModalType("signup")}>SignUp</span>
     </div>  
     </>
   );
