@@ -80,7 +80,7 @@ export function NavUser({
         "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 
       toast.error("Logout failed, but you've been signed out locally");
-      router.push("/auth/login");
+      router.push("/");
     }
   };
 
