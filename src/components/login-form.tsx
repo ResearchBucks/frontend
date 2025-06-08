@@ -1,19 +1,24 @@
 "use client";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { userloginImg } from "@/assests/assests";
-import { loginpwImg } from "@/assests/assests";
 import { useForm } from "react-hook-form";
-import { userLoginSchema } from "@/schema/user/user-details";
-import { userLoginDataTypes } from "@/schema/user/user-details";
+import {
+  userLoginSchema,
+  userLoginDataTypes,
+} from "@/schema/user/user-details";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import CustomAxios from "@/app/api/CustomAxios";
-import { setAccessToken } from "@/lib/redux/authSlice";
+import {
+  setAccessToken,
+  setUserEmail,
+  setUserID,
+  setUserRole,
+} from "@/lib/redux/authSlice";
 import { useState } from "react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 
 type LoginFormProps = {
@@ -25,8 +30,11 @@ type LoginFormProps = {
 export function LoginForm({setModalType, onClose, setUserLoginType} :LoginFormProps) {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
+
   const [userLoginType, setLocalUserLoginType] = useState<string>("researcher");
   const [showForgot, setShowForgot] = useState<boolean>(false)
+  const router = useRouter();
+
 
   const handleUserTypeChange = (type: string) => {
     setLocalUserLoginType(type);
@@ -43,13 +51,24 @@ export function LoginForm({setModalType, onClose, setUserLoginType} :LoginFormPr
   //the login submit function for user
   const onsubmit = async (data: userLoginDataTypes) => {
     try {
-     const endpoint= userLoginType === "researcher" ? "researcher/auth/login" :"respondent/auth/login"
-     const res = await CustomAxios.post(endpoint, data);
+      const endpoint =
+        userLoginType === "researcher"
+          ? "researcher/auth/login"
+          : "respondent/auth/login";
+      const res = await CustomAxios.post(endpoint, data);
       if (res.status === 200) {
         dispatch(setAccessToken(res.data.data.token));
+        dispatch(setUserRole(res.data.data.roles[0]));
+        dispatch(setUserEmail(res.data.data.email));
+        dispatch(setUserID(res.data.data.id));
+        document.cookie = `userRole=${res.data.data.roles[0]}; path=/`;
+
         console.log(res.data);
+        toast.success("Login Successful");
+        router.push("/admin/dashboard");
       }
     } catch (err) {
+      toast.error("Login Failed. Please check your credentials.");
       console.log(err);
     }
   };
@@ -85,22 +104,26 @@ export function LoginForm({setModalType, onClose, setUserLoginType} :LoginFormPr
         Respondent       
       </div>
       </div>
-    </div>
 
-    <form onSubmit={handleSubmit(onsubmit)} className="flex flex-col gap-4 pt-3 text-sm">
-      {/* the input field for email */}
-      <div>
-        <label>Email</label>
-        <Input
-          type="email"
-          placeholder="ex: admin@gmail.com"
-          {...register("email")}
-          className={errors.email ? "border border-error" : ""}
-        />
-        {errors.email && (
-          <span className="text-[10px] text-error">{errors.email.message}</span>
-        )}
-      </div>
+      <form
+        onSubmit={handleSubmit(onsubmit)}
+        className="flex flex-col gap-4 pt-3 text-sm"
+      >
+        {/* the input field for email */}
+        <div>
+          <label>Email</label>
+          <Input
+            type="email"
+            placeholder="ex: admin@gmail.com"
+            {...register("email")}
+            className={errors.email ? "border border-error" : ""}
+          />
+          {errors.email && (
+            <span className="text-[10px] text-error">
+              {errors.email.message}
+            </span>
+          )}
+        </div>
 
       {/* the input field for password */}
       <div className="flex flex-col relative">
@@ -128,24 +151,24 @@ export function LoginForm({setModalType, onClose, setUserLoginType} :LoginFormPr
             Forgot Password ?
           </p>
         </div>
-      </div>
 
-      {/* the submit for login */}
-      <div className="pt-3 w-full">
-        <Button
-          type="submit"
-          variant="login"
-          size="sm"
-          name="Submit"
-          className="w-full cursor-pointer"
-        />
-      </div>
+        {/* the submit for login */}
+        <div className="pt-3 w-full">
+          <Button
+            type="submit"
+            variant="login"
+            size="sm"
+            name="Submit"
+            className="w-full cursor-pointer"
+          />
+        </div>
+      </form>
+
     </form>
     <div className="flex flex-row gap-2 justify-center pt-4 text-xs tracking-wide">
       <p>Don't have an account?</p><span className="hover:font-medium hover:underline underline-offset-4 cursor-pointer hover:underline-main hover:text-main" onClick={()=>setModalType("signup")}>SignUp</span>
     </div>  
 
-  
     </>
   );
 }
