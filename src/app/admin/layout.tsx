@@ -20,11 +20,10 @@ export default async function Layout({
     return Object.values(UserRoles).includes(role as UserRoles);
   };
 
-  console.log("roleCookie", roleCookie);
+  console.log("roleCookie>>", roleCookie);
   const userRole: UserRoles = isValidRole(roleCookie)
     ? roleCookie
     : UserRoles.SUPER_ADMIN;
-  // const userRole = UserRoles.SUPER_ADMIN;
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
