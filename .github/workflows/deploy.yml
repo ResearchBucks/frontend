@@ -61,8 +61,8 @@ jobs:
           port: 22
           script: |
             docker pull $IMAGE_NAME:latest
-            docker stop your-container-name || true
-            docker rm your-container-name || true
-            docker run -d -p 80:3000 --name your-container-name $IMAGE_NAME:latest
+            #docker stop research-bucks-fe || true
+            docker rm research-bucks-fe || true
+            docker run -d -p 80:3000 --name research-bucks-fe $IMAGE_NAME:latest
 
 
