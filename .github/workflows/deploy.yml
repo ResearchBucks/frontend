@@ -62,9 +62,7 @@ jobs:
           port: 22
           envs: IMAGE_NAME,DOCKERHUB_USERNAME,DOCKERHUB_TOKEN
           script: |
-            echo "Logging in to Docker Hub..."
-            echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin || { echo "Docker login failed"; exit 1; }
-
+          
             docker pull $IMAGE_NAME:latest
             echo "Stopping existing container (if exists)..."
             docker stop research-bucks-f 2>/dev/null || echo "No existing container to stop"
