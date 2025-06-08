@@ -3,7 +3,13 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { SignUp } from "../page";
 
-export default function SignupPage({ open, onOpenChange,setModalType}){
+interface SignupPageProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  setModalType: (type: "login" | "signup" | "reset" | null) => void;
+}
+
+export default function SignupPage({ open, onOpenChange,setModalType}:SignupPageProps){
    
      return (
        <>
