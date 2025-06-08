@@ -35,20 +35,20 @@ export default function SignUpPassword() {
 
   const onsubmit = async (data: passwordResetDataTypes) => {
     const Newdata = { token, password: data.password };
-    const endpoint =
-      role === "researcher"
-        ? "researcher/auth/resetPassword"
-        : "respondent/auth/resetPassword";
-    try {
-      const res = await CustomAxios.post(endpoint, Newdata);
-      if (res.status === 200) {
-        toast.success("Password Reset sucessfully!");
-      }
-    } catch (err: any) {
-      toast.error("Error Occured in password Reset! try again!");
-      console.log(err);
+    try{
+        const endpoint = role === "researcher" ? "researcher/auth/verifyResearcher" : "respondent/auth/verifyRespondent"
+        const res = await CustomAxios.post(endpoint, Newdata);
+        if (res.status === 200) {
+            toast.success("Password was send sucessfully!");
+            //enter the naviagtion to log into the syste succesfully
+        }
+        
+    }catch(err){
+        console.log(err)
+         toast.error("Error Occured in password submmision! try again!");
     }
   };
+
   return (
     <div className="w-screen min-h-screen flex items-center justify-center flex-col bg-main/30">
       <div className="bg-white p-6 min-w-[380px] max-h-[55vh]  mob2:h-screen w-auto rounded-md flex flex-col gap-4 shadow-md justify-center">
@@ -56,11 +56,11 @@ export default function SignUpPassword() {
           <img src={logo} className="w-full size-32" />
         </div>
         <div className="flex flex-col pb-2 gap-1">
-          <h1 className="font-semibold text-lg tracking-wider text-center">
-            Change Your Password
+          <h1 className="font-semibold text-xl tracking-wide text-center">
+            Enter Your Password
           </h1>
           <p className="text-xs text-center text-textgray ">
-            Enter a new password below to change your password
+            Enter your new password below to log into the system successfully
           </p>
         </div>
 
@@ -69,18 +69,19 @@ export default function SignUpPassword() {
           className="gap-2 flex flex-col w-full"
         >
           <div className="relative flex flex-col">
+            <label className="text-sm  pb-1">Password</label>
             <Input
               type={showPassword ? "text" : "password"}
-              placeholder="Password"
+              placeholder="*******"
               {...register("password")}
               className={errors.password ? "border border-riskcolor" : ""}
             />
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute right-3 top-1/3 -translate-y-1 text-text hover:text-gray-700 focus:outline-none cursor-pointer"
+              className="absolute right-3 top-1/2 -translate-y-1 text-text hover:text-gray-700 focus:outline-none cursor-pointer"
             >
-              {showPassword ? <IoEyeOff size={18} /> : <IoEye size={18} />}
+              {showPassword ? <IoEyeOff size={18} className="text-black/50" /> : <IoEye size={18}  className="text-black/50"/>}
             </button>
             {errors.password && (
               <span className="text-[10px] text-red-600">
@@ -89,9 +90,10 @@ export default function SignUpPassword() {
             )}
           </div>
           <div className="relative flex flex-col">
+            <label className="text-sm  pb-1">Confirm Password</label>
             <Input
               type={showConfirmPw ? "text" : "password"}
-              placeholder="Confirm password"
+              placeholder="*******"
               {...register("confirm_password")}
               className={
                 errors.confirm_password ? "border border-riskcolor" : ""
@@ -100,9 +102,9 @@ export default function SignUpPassword() {
             <button
               type="button"
               onClick={() => setShowConfrimPw((prev) => !prev)}
-              className="absolute right-3 top-1/3 -translate-y-1 text-text hover:text-gray-700 focus:outline-none cursor-pointer"
+              className="absolute right-3 top-1/2 -translate-y-1 text-text hover:text-gray-700 focus:outline-none cursor-pointer"
             >
-              {showConfirmPw ? <IoEyeOff size={18} /> : <IoEye size={18} />}
+              {showConfirmPw ? <IoEyeOff size={18} className="text-black/50" /> : <IoEye size={18}  className="text-black/50"/>}
             </button>
             {errors.confirm_password && (
               <span className="text-[10px] text-red-600">
@@ -116,7 +118,7 @@ export default function SignUpPassword() {
               type="submit"
               variant="login"
               size="sm"
-              name="CHANGE"
+              name="SUBMIT"
               className="w-full cursor-pointer"
             />
           </div>
