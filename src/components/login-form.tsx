@@ -20,13 +20,26 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-type userLoginRes = {};
-export function LoginForm({ onSwitch }: { onSwitch: () => void }) {
+
+type LoginFormProps = {
+  onClose:()=>void;
+  setModalType: (type: "login" | "signup" | "reset" | null) => void;
+  setUserLoginType: (type: string) => void;
+};
+
+export function LoginForm({setModalType, onClose, setUserLoginType} :LoginFormProps) {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const [userLoginType, setUserLoginType] = useState<string>("researcher");
+
+  const [userLoginType, setLocalUserLoginType] = useState<string>("researcher");
+  const [showForgot, setShowForgot] = useState<boolean>(false)
   const router = useRouter();
 
+
+  const handleUserTypeChange = (type: string) => {
+    setLocalUserLoginType(type);
+    setUserLoginType(type);
+  };
   const {
     register,
     handleSubmit,
@@ -60,34 +73,36 @@ export function LoginForm({ onSwitch }: { onSwitch: () => void }) {
     }
   };
 
+  const handleForgot= ()=>{
+    onClose();
+    setModalType("reset")
+  }
+
   return (
     <>
-      <div className="flex flex-col">
-        <p className="text-base font-medium text-center">
-          Login to ResearchBucks as
-        </p>
-        <div className="flex flex-row justify-between mx-auto gap-12 text-sm">
-          <div className="flex flex-row items-center gap-2">
-            <Input
-              type="checkbox"
-              className="w-4 accent-main cursor-pointer"
-              value="researcher"
-              checked={userLoginType === "researcher"}
-              onChange={() => setUserLoginType("researcher")}
-            />
-            Researcher
-          </div>
-          <div className="flex flex-row items-center gap-2">
-            <Input
-              type="checkbox"
-              className="w-4 accent-main cursor-pointer"
-              value="respondent"
-              checked={userLoginType === "respondent"}
-              onChange={() => setUserLoginType("respondent")}
-            />
-            Respondent
-          </div>
+    <div className="flex flex-col">
+       <p className="text-base font-medium text-center">Login to ResearchBucks as</p>
+      <div className="flex flex-row justify-between mx-auto gap-12 text-sm">
+        <div className="flex flex-row items-center gap-2">
+          <Input
+            type="checkbox"
+            className="w-4 accent-main cursor-pointer"
+            value="researcher"
+            checked={userLoginType === "researcher"}
+            onChange={() =>handleUserTypeChange("researcher")}
+          />
+          Researcher
         </div>
+        <div className="flex flex-row items-center gap-2">
+        <Input
+          type="checkbox"
+          className="w-4 accent-main cursor-pointer"
+          value="respondent"
+          checked={userLoginType === "respondent"}
+          onChange={() =>handleUserTypeChange("respondent")}
+        />
+        Respondent       
+      </div>
       </div>
 
       <form
@@ -110,32 +125,31 @@ export function LoginForm({ onSwitch }: { onSwitch: () => void }) {
           )}
         </div>
 
-        {/* the input field for password */}
-        <div className="flex flex-col relative">
-          <label className="text-sm">Password</label>
-          <Input
-            type={showPassword ? "text" : "password"}
-            placeholder="*******"
-            {...register("password")}
-            className={errors.password ? "border border-error" : ""}
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute right-3 top-1/2 -translate-y-1 text-text hover:text-gray-700 focus:outline-none cursor-pointer"
-          >
-            {showPassword ? <IoEyeOff size={18} /> : <IoEye size={18} />}
-          </button>
-          {errors.password && (
-            <span className="text-[10px] text-error">
-              {errors.password.message}
-            </span>
-          )}
-          <div className="flex flex-row justify-end pt-1">
-            <p className="text-[.7rem] cursor-pointer hover:text-main hover:font-medium ">
-              Forgot Password ?
-            </p>
-          </div>
+      {/* the input field for password */}
+      <div className="flex flex-col relative">
+        <label className="text-sm">Password</label>
+        <Input
+          type={showPassword ? "text" : "password"}
+          placeholder="*******"
+          {...register("password")}
+          className={errors.password ? "border border-error" : ""}
+        />
+        <button
+          type="button"
+          onClick={() => setShowPassword((prev) => !prev)}
+          className="absolute right-3 top-1/2 -translate-y-1 text-text hover:text-gray-700 focus:outline-none cursor-pointer"
+        >
+          {showPassword ? <IoEyeOff size={18} /> : <IoEye size={18} />}
+        </button>
+        {errors.password && (
+          <span className="text-[10px] text-error">
+            {errors.password.message}
+          </span>
+        )}
+        <div className="flex flex-row justify-end pt-1">
+          <p className="text-[.7rem] cursor-pointer hover:text-main hover:font-medium" onClick={handleForgot}>
+            Forgot Password ?
+          </p>
         </div>
 
         {/* the submit for login */}
@@ -149,15 +163,12 @@ export function LoginForm({ onSwitch }: { onSwitch: () => void }) {
           />
         </div>
       </form>
-      <div className="flex flex-row gap-2 justify-center pt-4 text-xs tracking-wide">
-        <p>Don't have an account?</p>
-        <span
-          className="hover:font-medium hover:underline underline-offset-4 cursor-pointer hover:underline-main hover:text-main"
-          onClick={onSwitch}
-        >
-          SignUp
-        </span>
-      </div>
+
+    </form>
+    <div className="flex flex-row gap-2 justify-center pt-4 text-xs tracking-wide">
+      <p>Don't have an account?</p><span className="hover:font-medium hover:underline underline-offset-4 cursor-pointer hover:underline-main hover:text-main" onClick={()=>setModalType("signup")}>SignUp</span>
+    </div>  
+
     </>
   );
 }

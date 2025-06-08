@@ -12,8 +12,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import CustomAxios from "../api/CustomAxios";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
-export function SignUp({ onSwitch }: { onSwitch: () => void }) {
+type SignUpFormProps = {
+  setModalType: (type: "login" | "signup" | null) => void;
+};
+
+export function SignUp({setModalType} :SignUpFormProps) {
   const [userLoginType, setUserLoginType] = useState<
     "researcher" | "respondent"
   >("researcher");
@@ -52,8 +57,10 @@ export function SignUp({ onSwitch }: { onSwitch: () => void }) {
         console.log(res.data);
         reset();
       }
-    } catch (err) {
-      console.log(err);
+    } catch (err:any) {
+        if(err.response?.status === 401)
+            toast.error("Already registered")
+            console.log(err);
     }
   };
 
@@ -210,7 +217,7 @@ export function SignUp({ onSwitch }: { onSwitch: () => void }) {
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-3">
+        {/* <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col relative">
             <Input
               type={showPassword ? "text" : "password"}
@@ -251,7 +258,7 @@ export function SignUp({ onSwitch }: { onSwitch: () => void }) {
               </span>
             )}
           </div>
-        </div>
+        </div> */}
 
         <div className="pt-3 w-full">
           <Button
@@ -268,7 +275,7 @@ export function SignUp({ onSwitch }: { onSwitch: () => void }) {
           Already have an account?{" "}
           <span
             className="font-medium hover:underline hover:text-main cursor-pointer"
-            onClick={onSwitch}
+            onClick={()=>setModalType("login")}
           >
             Login
           </span>
