@@ -32,7 +32,7 @@ export function NavMain({
   return (
     <SidebarGroup>
       {title && <SidebarGroupLabel>{title}</SidebarGroupLabel>}
-      <SidebarMenu>
+      <SidebarMenu className="space-y-1">
         {items.map((item) =>
           item.items && item.items.length > 0 ? (
             <Collapsible
