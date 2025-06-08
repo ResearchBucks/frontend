@@ -9,7 +9,9 @@ import SignupPage from "@/app/signup/signupPage/page";
 import ResetRequest from "@/app/passwordReset/resetRequest/page";
 
 export default function Header() {
- const [modalType, setModalType] = useState<"login" | "signup" | "reset" |null>(null);
+const [modalType, setModalType] = useState<"login" | "signup" | "reset" |null>(null);
+const [userLoginType, setUserLoginType] = useState<string>("researcher")
+
 const [open, onOpenChange] = useState(false)
   const navItems = [
     { title: "Home", href: "/" },
@@ -65,6 +67,7 @@ const [open, onOpenChange] = useState(false)
             open={modalType === "login"} 
             onOpenChange={(open) => !open && setModalType(null)} 
             setModalType={setModalType} 
+            setUserLoginType={setUserLoginType}
         />
         )}
                {modalType === "signup" && (
@@ -78,6 +81,7 @@ const [open, onOpenChange] = useState(false)
         <ResetRequest 
           open={modalType === "reset"}
           onOpenChange={(open) => !open && setModalType(null)}
+          userLoginType={userLoginType}
         />
       )}
     </div>

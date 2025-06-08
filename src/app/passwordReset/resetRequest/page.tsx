@@ -8,7 +8,7 @@ interface ResetRequestProps {
   userLoginType:string;
 }
 
-export default function ResetRequest({ open, onOpenChange }: ResetRequestProps) {
+export default function ResetRequest({ open, onOpenChange,  userLoginType }: ResetRequestProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>

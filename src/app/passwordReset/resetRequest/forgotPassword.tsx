@@ -34,17 +34,17 @@ const emailSchema = z.object({
     }
   };
     return(
-<div className="">
-    <h1 className="text-sm text-center">A password reset link will be send to you email. Enter the email that you want to recieve the email</h1>
-    <form onSubmit={handleSubmit(onsubmit)}>
-        <div>
-            <label>Enter the email:</label>
-            <Input
-            placeholder="ex: abc@gmail.com"
-            className="text-xs"
-            />
-        </div>
-    </form>
-</div>
+    <div className="">
+        <h1 className="text-sm text-center">A password reset link will be send to you email. Enter the email that you want to recieve the email</h1>
+        <form onSubmit={handleSubmit(onsubmit)}>
+            <div>
+                <label>Enter the email:</label>
+                <Input
+                placeholder="ex: abc@gmail.com"
+                className="text-xs"
+                />
+            </div>
+        </form>
+    </div>
     )
 }
