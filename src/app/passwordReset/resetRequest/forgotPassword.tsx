@@ -5,6 +5,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CustomAxios from "@/app/api/CustomAxios";
+import { Button } from "@/components/ui/button";
 
 interface ForgotPasswordProps {
   userLoginType: string;
@@ -35,15 +36,28 @@ const emailSchema = z.object({
   };
     return(
     <div className="">
-        <h1 className="text-sm text-center">A password reset link will be send to you email. Enter the email that you want to recieve the email</h1>
-        <form onSubmit={handleSubmit(onsubmit)}>
+        <h1 className="text-xs text-center">A password reset link will be send to you email. Enter the email that you want to recieve the email</h1>
+        <form onSubmit={handleSubmit(onsubmit)} className="flex flex-col gap-4 pt-3">
             <div>
-                <label>Enter the email:</label>
+                <label className="text-sm font-medium">Enter the email:</label>
                 <Input
                 placeholder="ex: abc@gmail.com"
-                className="text-xs"
+                {...register("email")}
+                className={errors.email ? "border border-error" : ""}
                 />
+                {errors.email && (
+                <span className="text-[10px] text-error">{errors.email.message}</span>
+                )}
             </div>
+        <div className=" w-full">
+        <Button
+          type="submit"
+          variant="login"
+          size="sm"
+          name="Submit"
+          className="w-full cursor-pointer"
+        />
+      </div>
         </form>
     </div>
     )

@@ -11,7 +11,7 @@ interface LoginPageProps {
   setUserLoginType: (type: string) => void;
 }
 
-export default function LoginPage({ open, onOpenChange, setModalType}:LoginPageProps) {
+export default function LoginPage({ open, onOpenChange, setModalType, setUserLoginType}:LoginPageProps) {
 
   return (
     <>
