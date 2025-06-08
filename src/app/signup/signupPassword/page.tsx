@@ -36,7 +36,7 @@ export default function SignUpPassword() {
   const onsubmit = async (data: passwordResetDataTypes) => {
     const Newdata = { token, password: data.password };
     try{
-        const endpoint = role === "researcher" ? "researcher/auth/verifyResearcher" : "respondent/auth/verifyRespondent"
+        const endpoint = role === "ROLE_RESEARCHER" ? "researcher/auth/verifyResearcher" : "respondent/auth/verifyRespondent"
         const res = await CustomAxios.post(endpoint, Newdata);
         if (res.status === 200) {
             toast.success("Password was send sucessfully!");
