@@ -16,11 +16,15 @@ import { useState } from "react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import ResetRequest from "@/app/passwordReset/resetRequest/page";
 
-type userLoginRes = {};
-export function LoginForm({ onSwitch, onForgotPassword}: { onSwitch: () => void; onForgotPassword:() =>void }) {
+type LoginFormProps = {
+  onClose:()=>void;
+  setModalType: (type: "login" | "signup" | "reset" | null) => void;
+};
+export function LoginForm({setModalType, onClose} :LoginFormProps) {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const [userLoginType, setUserLoginType] = useState<string>("researcher")
+  const [userLoginType, setUserLoginType] = useState<string>("researcher");
+  const [showForgot, setShowForgot] = useState<boolean>(false)
 
   const {
     register,
@@ -43,6 +47,11 @@ export function LoginForm({ onSwitch, onForgotPassword}: { onSwitch: () => void;
       console.log(err);
     }
   };
+
+  const handleForgot= ()=>{
+    onClose();
+    setModalType("reset")
+  }
 
   return (
     <>
@@ -109,7 +118,7 @@ export function LoginForm({ onSwitch, onForgotPassword}: { onSwitch: () => void;
           </span>
         )}
         <div className="flex flex-row justify-end pt-1">
-          <p className="text-[.7rem] cursor-pointer hover:text-main hover:font-medium" onClick={onForgotPassword}>
+          <p className="text-[.7rem] cursor-pointer hover:text-main hover:font-medium" onClick={handleForgot}>
             Forgot Password ?
           </p>
         </div>
@@ -127,8 +136,10 @@ export function LoginForm({ onSwitch, onForgotPassword}: { onSwitch: () => void;
       </div>
     </form>
     <div className="flex flex-row gap-2 justify-center pt-4 text-xs tracking-wide">
-      <p>Don't have an account?</p><span className="hover:font-medium hover:underline underline-offset-4 cursor-pointer hover:underline-main hover:text-main" onClick={onSwitch}>SignUp</span>
+      <p>Don't have an account?</p><span className="hover:font-medium hover:underline underline-offset-4 cursor-pointer hover:underline-main hover:text-main" onClick={()=>setModalType("signup")}>SignUp</span>
     </div>  
+
+  
     </>
   );
 }
