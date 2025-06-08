@@ -1,12 +1,16 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import { SurveyCard } from "./survey-card";
 import { FileText } from "lucide-react";
 import { SurveyGridProps } from "@/types/surveys/surveys";
 import { SurveyPagination } from "./survey-pagination";
 import { SurveyFilters } from "./survey-filters";
 import { EmptyState } from "@/components/shared/empty-state";
+import { toast } from "sonner";
+import CustomAxios from "@/app/api/CustomAxios";
+import { useAppSelector } from "@/lib/redux/hooks";
 
 export function SurveyGrid({
   surveys,
@@ -15,19 +19,60 @@ export function SurveyGrid({
   totalPages,
   pageSize,
 }: SurveyGridProps) {
+  const router = useRouter();
+  const userId = useAppSelector((state) => state.auth.userId);
+
   const handleView = (surveyId: string) => {
     console.log("View survey:", surveyId);
-    // Add navigation logic here
+    // Navigate to survey view/details page
+    // router.push(`/admin/surveys/${surveyId}`);
   };
 
   const handleEdit = (surveyId: string) => {
     console.log("Edit survey:", surveyId);
-    // Add edit logic here
+    // Navigate to survey edit page
+    // router.push(`/admin/surveys/${surveyId}/edit`);
   };
 
-  const handleDelete = (surveyId: string) => {
-    console.log("Delete survey:", surveyId);
-    // Add delete logic here
+  const handleDelete = async (surveyId: string) => {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this survey? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+
+    try {
+      // Call delete API endpoint
+      const response = await CustomAxios.delete(
+        `researcher/survey/delete/${surveyId}`
+      );
+
+      if (response.status === 200) {
+        toast.success("Survey deleted successfully");
+        // Refresh the page to update the surveys list
+        window.location.reload();
+      } else {
+        toast.error("Failed to delete survey");
+      }
+    } catch (error: any) {
+      console.error("Error deleting survey:", error);
+
+      if (error.response?.status === 401) {
+        toast.error("Authentication failed. Please log in again.");
+      } else if (error.response?.status === 403) {
+        toast.error("You don't have permission to delete this survey.");
+      } else if (error.response?.status === 404) {
+        toast.error("Survey not found.");
+      } else {
+        toast.error("An error occurred while deleting the survey.");
+      }
+    }
+  };
+
+  const handleCreateSurvey = () => {
+    router.push("/admin/create-survey");
   };
 
   return (
@@ -40,7 +85,7 @@ export function SurveyGrid({
           title="No surveys found"
           description="You haven't created any surveys yet, or no surveys match your current filters."
           actionText="Create Survey"
-          onAction={() => console.log("Create new survey")}
+          onAction={handleCreateSurvey}
         />
       ) : (
         <>

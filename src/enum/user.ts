@@ -1,8 +1,8 @@
 export enum UserRoles {
-  ADMIN = "admin",
-  SUPER_ADMIN = "superAdmin",
-  RESEARCHER = "researcher",
-  RESPONDENT = "respondent",
+  ADMIN = "ROLE_ADMIN",
+  SUPER_ADMIN = "ROLE_SUPER_ADMIN",
+  RESEARCHER = "ROLE_RESEARCHER",
+  RESPONDENT = "ROLE_RESPONDENT",
 }
 
 export enum UserStatus {

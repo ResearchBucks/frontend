@@ -1,52 +1,188 @@
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { userloginImg } from "@/assests/assests"
-import {loginpwImg} from '@/assests/assests';
+"use client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import {
+  userLoginSchema,
+  userLoginDataTypes,
+} from "@/schema/user/user-details";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAppDispatch } from "@/lib/redux/hooks";
+import CustomAxios from "@/app/api/CustomAxios";
+import {
+  setAccessToken,
+  setUserEmail,
+  setUserID,
+  setUserRole,
+} from "@/lib/redux/authSlice";
+import { useState } from "react";
+import { IoEye, IoEyeOff } from "react-icons/io5";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+type LoginFormProps = {
+  onClose: () => void;
+  setModalType: (type: "login" | "signup" | "reset" | null) => void;
+  setUserLoginType: (type: string) => void;
+};
 
 export function LoginForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"form">) {
-  return (
-    <form className={cn("flex flex-col gap-8", className)} {...props}>
-      <h1 className="text-2xl text-center  font-bold">Login</h1>
+  setModalType,
+  onClose,
+  setUserLoginType,
+}: LoginFormProps) {
+  const dispatch = useAppDispatch();
+  const [showPassword, setShowPassword] = useState(false);
 
-      {/* the input fields and the login button */}
-      <div className="grid gap-4 ">
-        <div className="grid gap-4">
-          <Input id="email" type="email" placeholder="username" required icon={<img src={userloginImg} alt="user icon" className="w-5 h-6" />}/>
-          {/* <Input id="email" type="email" placeholder="m@example.com" required /> */}
-          <Input id="password" type="password" placeholder="password" required icon={<img src={loginpwImg} alt="pw icon" className= 'w-5 h-6' />} />
+  const [userLoginType, setLocalUserLoginType] = useState<string>("researcher");
+  const [showForgot, setShowForgot] = useState<boolean>(false);
+  const router = useRouter();
+
+  const handleUserTypeChange = (type: string) => {
+    setLocalUserLoginType(type);
+    setUserLoginType(type);
+  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<userLoginDataTypes>({
+    resolver: zodResolver(userLoginSchema),
+  });
+
+  //the login submit function for user
+  const onsubmit = async (data: userLoginDataTypes) => {
+    try {
+      const endpoint =
+        userLoginType === "researcher"
+          ? "researcher/auth/login"
+          : "respondent/auth/login";
+      const res = await CustomAxios.post(endpoint, data);
+      if (res.status === 200) {
+        dispatch(setAccessToken(res.data.data.token));
+        dispatch(setUserRole(res.data.data.roles[0]));
+        dispatch(setUserEmail(res.data.data.email));
+        dispatch(setUserID(res.data.data.id));
+        document.cookie = `userRole=${res.data.data.roles[0]}; path=/`;
+
+        console.log(res.data);
+        toast.success("Login Successful");
+        router.push("/admin/dashboard");
+      }
+    } catch (err: any) {
+      toast.error(
+        err?.response?.data?.message ||
+          "Login Failed. Please check your credentials."
+      );
+      console.log(err);
+    }
+  };
+
+  const handleForgot = () => {
+    onClose();
+    setModalType("reset");
+  };
+
+  return (
+    <>
+      <div className="flex flex-col">
+        <p className="text-base font-medium text-center">
+          Login to ResearchBucks as
+        </p>
+        <div className="flex flex-row justify-between mx-auto gap-12 text-sm">
+          <div className="flex flex-row items-center gap-2">
+            <Input
+              type="checkbox"
+              className="w-4 accent-main cursor-pointer"
+              value="researcher"
+              checked={userLoginType === "researcher"}
+              onChange={() => handleUserTypeChange("researcher")}
+            />
+            Researcher
+          </div>
+          <div className="flex flex-row items-center gap-2">
+            <Input
+              type="checkbox"
+              className="w-4 accent-main cursor-pointer"
+              value="respondent"
+              checked={userLoginType === "respondent"}
+              onChange={() => handleUserTypeChange("respondent")}
+            />
+            Respondent
+          </div>
         </div>
 
-        <button type="submit" className="w-full bg-[var(--main-light)] rounded-md  cursor-pointer hover:bg-[var(--main-light)]/80 p-2 text-[var(--main-text-light)] mt-3">
-          Login
-        </button>
-        <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-           <span className="relative z-10 bg-background px-2 text-muted-foreground">
-              <a href="#"  className="ml-auto text-sm text-center underline-offset-4 hover:underline">
-                Forgot your password?
-              </a>
+        <form
+          onSubmit={handleSubmit(onsubmit)}
+          className="flex flex-col gap-4 pt-3 text-sm"
+        >
+          {/* the input field for email */}
+          <div>
+            <label>Email</label>
+            <Input
+              type="email"
+              placeholder="ex: admin@gmail.com"
+              {...register("email")}
+              className={errors.email ? "border border-error" : ""}
+            />
+            {errors.email && (
+              <span className="text-[10px] text-error">
+                {errors.email.message}
+              </span>
+            )}
+          </div>
+
+          {/* the input field for password */}
+          <div className="flex flex-col relative">
+            <label className="text-sm">Password</label>
+            <Input
+              type={showPassword ? "text" : "password"}
+              placeholder="*******"
+              {...register("password")}
+              className={errors.password ? "border border-error" : ""}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-3 top-1/2 -translate-y-1 text-text hover:text-gray-700 focus:outline-none cursor-pointer"
+            >
+              {showPassword ? <IoEyeOff size={18} /> : <IoEye size={18} />}
+            </button>
+            {errors.password && (
+              <span className="text-[10px] text-error">
+                {errors.password.message}
+              </span>
+            )}
+            <div className="flex flex-row justify-end pt-1">
+              <p
+                className="text-[.7rem] cursor-pointer hover:text-main hover:font-medium"
+                onClick={handleForgot}
+              >
+                Forgot Password ?
+              </p>
+            </div>
+          </div>
+          {/* the submit for login */}
+          <div className="pt-3 w-full">
+            <Button
+              type="submit"
+              variant="login"
+              size="sm"
+              name="Submit"
+              className="w-full cursor-pointer"
+            />
+          </div>
+        </form>
+        <div className="flex flex-row gap-2 justify-center pt-4 text-xs tracking-wide">
+          <p>Don't have an account?</p>
+          <span
+            className="hover:font-medium hover:underline underline-offset-4 cursor-pointer hover:underline-main hover:text-main"
+            onClick={() => setModalType("signup")}
+          >
+            SignUp
           </span>
         </div>
-        {/* <Button variant="outline" className="w-full">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path
-              d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
-              fill="currentColor"
-            />
-          </svg>
-          Login with GitHub
-        </Button> */}
       </div>
-      <div className="text-center text-sm">
-        Don&apos;t have an account?{" "}
-        <a href="#" className="underline underline-offset-4">
-          Sign up
-        </a>
-      </div>
-    </form>
-  )
+    </>
+  );
 }
