@@ -39,18 +39,8 @@ export const researcherSignupschema = z.object({
   mobile:z.number().min(10),
   nic:z.string().min(10),
   address:z.string().min(1),
-  password:passwordSchema,
-  confirm_password:confirmPasswordSchema,
 })
-.superRefine(({ confirm_password, password }, ctx) => {
- if (confirm_password !== password) {
-    ctx.addIssue({
-      code: "custom",
-      message: "The passwords doesn't match",
-      path: ['confirm_password']
-    });
-  }
-});
+
 
 
 export const respondentSignupSchema =z.object({
@@ -60,6 +50,12 @@ export const respondentSignupSchema =z.object({
   mobile:z.number().min(10),
   nic:z.string().min(10),
   address:z.string().min(1),
+})
+
+
+export const passwordResetSchema = z.object({
+  token:z.string(),
+  role:z.string(),
   password:passwordSchema,
   confirm_password:confirmPasswordSchema,
 })
@@ -78,3 +74,4 @@ export type respondentSignupDatatypes = z.infer<typeof respondentSignupSchema>;
 export type researcherSignupDataTypes = z.infer<typeof researcherSignupschema>;
 export type userLoginDataTypes = z.infer<typeof userLoginSchema>;
 export type adminLoginDataTypes = z.infer<typeof adminLoginSchema>;
+export type passwordResetDataTypes = z.infer<typeof passwordResetSchema>;
