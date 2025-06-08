@@ -55,6 +55,7 @@ export const respondentSignupSchema =z.object({
 
 export const passwordResetSchema = z.object({
   token:z.string(),
+  role:z.string(),
   password:passwordSchema,
   confirm_password:confirmPasswordSchema,
 })
