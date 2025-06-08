@@ -9,8 +9,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
-
-
+import { toast } from "sonner";
 
 export default function ResetPassword(){
      const searchParams = useSearchParams();
@@ -31,21 +30,23 @@ export default function ResetPassword(){
         },
       });
 
-        const onsubmit = async(data:passwordResetDataTypes) =>{
+    const onsubmit = async(data:passwordResetDataTypes) =>{
         const Newdata = {token,password:data.password}
+        const endpoint = role === "researcher" ? "researcher/auth/resetPassword" : "respondent/auth/resetPassword"
         try{
-            const res = await CustomAxios.post("password-reset/confirm", Newdata);
+            const res = await CustomAxios.post(endpoint, Newdata);
             if(res.status === 200){
-    
+                toast.success("Password Reset sucessfully!")
             }
         }catch(err:any){
+            toast.error("Error Occured in password Reset! try again!")
             console.log(err);
         }
     }
     return(
         <div className="w-screen min-h-screen flex items-center justify-center flex-col bg-main">
-            <div className="bg-white p-6 min-w-[320px] max-h-[55vh] mob2:h-screen w-auto rounded-md flex flex-col gap-4 shadow-md justify-center">
-            <div className="w-full flex justify-center items-center ">
+            <div className="bg-white p-6 min-w-[380px] max-h-[55vh]  mob2:h-screen w-auto rounded-md flex flex-col gap-4 shadow-md justify-center">
+                <div className="w-full flex justify-center items-center p-2">
                     <img src={logo} className="w-full size-32"/>
                 </div>  
                 <div className="flex flex-col pb-2 gap-1">
@@ -100,7 +101,7 @@ export default function ResetPassword(){
           type="submit"
           variant="login"
           size="sm"
-          name="Submit"
+          name="CHANGE"
           className="w-full cursor-pointer"
         />
       </div>
