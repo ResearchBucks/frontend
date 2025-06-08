@@ -18,7 +18,7 @@ import ResetRequest from "@/app/passwordReset/resetRequest/page";
 
 type LoginFormProps = {
   onClose:()=>void;
-  setModalType: (type: "login" | "signup" | null) => void;
+  setModalType: (type: "login" | "signup" | "reset" | null) => void;
 };
 export function LoginForm({setModalType, onClose} :LoginFormProps) {
   const dispatch = useAppDispatch();
@@ -50,7 +50,7 @@ export function LoginForm({setModalType, onClose} :LoginFormProps) {
 
   const handleForgot= ()=>{
     onClose();
-    setShowForgot(true)
+    setModalType("reset")
   }
 
   return (
@@ -139,9 +139,7 @@ export function LoginForm({setModalType, onClose} :LoginFormProps) {
       <p>Don't have an account?</p><span className="hover:font-medium hover:underline underline-offset-4 cursor-pointer hover:underline-main hover:text-main" onClick={()=>setModalType("signup")}>SignUp</span>
     </div>  
 
-    {showForgot && (
-      <ResetRequest />
-    )}
+  
     </>
   );
 }

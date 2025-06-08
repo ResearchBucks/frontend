@@ -6,9 +6,10 @@ import { logo } from "@/assests/assests";
 import LoginPage from "@/app/login/page";
 
 import SignupPage from "@/app/signup/signupPage/page";
+import ResetRequest from "@/app/passwordReset/resetRequest/page";
 
 export default function Header() {
- const [modalType, setModalType] = useState<"login" | "signup" |null>(null);
+ const [modalType, setModalType] = useState<"login" | "signup" | "reset" |null>(null);
 const [open, onOpenChange] = useState(false)
   const navItems = [
     { title: "Home", href: "/" },
@@ -73,6 +74,12 @@ const [open, onOpenChange] = useState(false)
             setModalType={setModalType} 
         />
         )}
+        {modalType === "reset" && (
+        <ResetRequest 
+          open={modalType === "reset"}
+          onOpenChange={(open) => !open && setModalType(null)}
+        />
+      )}
     </div>
   );
 }
