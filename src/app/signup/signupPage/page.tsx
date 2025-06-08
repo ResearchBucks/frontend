@@ -3,12 +3,12 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { SignUp } from "../page";
 
-export default function SignupPage(){
+export default function SignupPage({ open, onOpenChange }){
    const [openModal, setOpenModal] = useState(true);
    
      return (
        <>
-         <Dialog open={openModal} onOpenChange={setOpenModal}>
+         <Dialog open={open} onOpenChange={onOpenChange}>
            <DialogContent>
              <DialogTitle className="text-xl font-bold mb-2 text-center">SignUp</DialogTitle>
              <SignUp />

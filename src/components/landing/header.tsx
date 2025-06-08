@@ -9,7 +9,7 @@ import SignupPage from "@/app/signup/signupPage/page";
 
 export default function Header() {
  const [modalType, setModalType] = useState<"login" | "signup" |null>(null);
-
+const [open, onOpenChange] = useState(false)
   const navItems = [
     { title: "Home", href: "/" },
     { title: "Respondents", href: "/#respondents" },
@@ -59,8 +59,18 @@ export default function Header() {
           ))}
         </ul>
       </div>
-      {modalType === "login" && (<LoginPage /> )} 
-    {modalType === "signup" && (<SignupPage /> )}
+        {modalType === "login" && (
+        <LoginPage 
+            open={modalType === "login"} 
+            onOpenChange={(open) => !open && setModalType(null)} 
+        />
+        )}
+               {modalType === "signup" && (
+        <SignupPage 
+            open={modalType === "signup"} 
+            onOpenChange={(open) => !open && setModalType(null)} 
+        />
+        )}
     </div>
   );
 }
