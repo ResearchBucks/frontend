@@ -14,18 +14,24 @@ import CustomAxios from "@/app/api/CustomAxios";
 import { setAccessToken } from "@/lib/redux/authSlice";
 import { useState } from "react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
-import ResetRequest from "@/app/passwordReset/resetRequest/page";
+
 
 type LoginFormProps = {
   onClose:()=>void;
   setModalType: (type: "login" | "signup" | "reset" | null) => void;
+  setUserLoginType: (type: string) => void;
 };
-export function LoginForm({setModalType, onClose} :LoginFormProps) {
+
+export function LoginForm({setModalType, onClose, setUserLoginType} :LoginFormProps) {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const [userLoginType, setUserLoginType] = useState<string>("researcher");
+  const [userLoginType, setLocalUserLoginType] = useState<string>("researcher");
   const [showForgot, setShowForgot] = useState<boolean>(false)
 
+  const handleUserTypeChange = (type: string) => {
+    setLocalUserLoginType(type);
+    setUserLoginType(type);
+  };
   const {
     register,
     handleSubmit,
@@ -64,7 +70,7 @@ export function LoginForm({setModalType, onClose} :LoginFormProps) {
             className="w-4 accent-main cursor-pointer"
             value="researcher"
             checked={userLoginType === "researcher"}
-            onChange={() =>setUserLoginType("researcher")}
+            onChange={() =>handleUserTypeChange("researcher")}
           />
           Researcher
         </div>
@@ -74,7 +80,7 @@ export function LoginForm({setModalType, onClose} :LoginFormProps) {
           className="w-4 accent-main cursor-pointer"
           value="respondent"
           checked={userLoginType === "respondent"}
-          onChange={() =>setUserLoginType("respondent")}
+          onChange={() =>handleUserTypeChange("respondent")}
         />
         Respondent       
       </div>
