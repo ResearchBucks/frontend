@@ -12,7 +12,7 @@ import { Loader2 } from "lucide-react";
 type GetSurveysResponse = {
   status: string;
   message: string;
-  data: any[]; // You might want to create a proper type for the API response
+  data: any[];
 };
 
 export default function SurveysPage() {

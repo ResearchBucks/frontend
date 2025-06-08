@@ -4,7 +4,7 @@ import { clearAuth } from "@/lib/redux/authSlice";
 
 const CustomAxios = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE,
-  timeout: 10000,
+  timeout: 100000, 
 });
 
 CustomAxios.interceptors.request.use(
@@ -45,7 +45,13 @@ CustomAxios.interceptors.response.use(
       errorMessage,
       url: err.config?.url,
       data: err.response?.data,
+      code: err.code,
     });
+
+    if (err.code === "ECONNABORTED") {
+      console.log("Request timed out");
+      return Promise.reject(new Error("Request timed out. Please try again."));
+    }
 
     if (
       status === 401 ||
@@ -60,14 +66,12 @@ CustomAxios.interceptors.response.use(
       );
     }
 
-    // Forbidden
     if (status === 403) {
       console.log("Forbidden access");
       alert("Forbidden access");
       return Promise.reject(err);
     }
 
-    // Bad request or not found
     if (status === 400 || status === 404 || status === 409 || status === 500) {
       console.log("Client or server error:", status);
       return Promise.reject(err);
