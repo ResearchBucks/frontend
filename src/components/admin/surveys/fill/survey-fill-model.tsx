@@ -8,10 +8,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye, Loader2 } from "lucide-react";
 import { Survey, SurveyResponse } from "@/types/surveys/surveys";
 import { SurveyFillForm } from "./fill-form";
 import { Progress } from "@/components/ui/progress";
+import CustomAxios from "@/app/api/CustomAxios";
+import { toast } from "sonner";
+import { useAppSelector } from "@/lib/redux/hooks";
 
 interface SurveyFillModalProps {
   survey: Survey | null;
@@ -19,6 +22,15 @@ interface SurveyFillModalProps {
   onClose: () => void;
   onSubmit: (response: SurveyResponse) => void;
   isViewMode?: boolean;
+}
+
+// Type for the API request payload
+interface SaveAnswersPayload {
+  questionId: number;
+  answer: Array<{
+    answerId: string;
+    answer: string;
+  }>;
 }
 
 export function SurveyFillModal({
@@ -30,6 +42,10 @@ export function SurveyFillModal({
 }: SurveyFillModalProps) {
   const [currentPage, setCurrentPage] = useState(0);
   const [responses, setResponses] = useState<Record<string, any>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Get userId from Redux store
+  const userId = useAppSelector((state: any) => state.auth.userId);
 
   if (!survey) return null;
 
@@ -76,25 +92,164 @@ export function SurveyFillModal({
     }
   };
 
-  const handleSubmit = () => {
+  // Transform responses to API format
+  const transformResponsesForAPI = (): SaveAnswersPayload[] => {
+    const apiPayload: SaveAnswersPayload[] = [];
+
+    Object.entries(responses).forEach(([questionId, response]) => {
+      const question = survey.questions.find((q) => q.id === questionId);
+      if (!question) return;
+
+      let answers: Array<{ answerId: string; answer: string }> = [];
+
+      switch (question.type) {
+        case "single_select":
+        case "yes_no":
+          // For single select, response should be the option ID
+          if (response) {
+            const selectedOption = question.options?.find(
+              (opt) => opt.id === response
+            );
+            answers.push({
+              answerId: response,
+              answer: selectedOption?.text || response,
+            });
+          }
+          break;
+
+        case "multi_select":
+          // For multi select, response should be an array of option IDs
+          if (Array.isArray(response)) {
+            response.forEach((optionId) => {
+              const selectedOption = question.options?.find(
+                (opt) => opt.id === optionId
+              );
+              answers.push({
+                answerId: optionId,
+                answer: selectedOption?.text || optionId,
+              });
+            });
+          }
+          break;
+
+        case "text":
+        case "textarea":
+        case "number":
+          // For text inputs, create a single answer entry
+          if (response) {
+            answers.push({
+              answerId: "text_answer", // You might want to generate a unique ID here
+              answer: response.toString(),
+            });
+          }
+          break;
+
+        case "rating":
+          // For rating, response should be the rating value
+          if (response) {
+            answers.push({
+              answerId: "rating_answer", // You might want to generate a unique ID here
+              answer: response.toString(),
+            });
+          }
+          break;
+
+        default:
+          // Handle any other question types
+          if (response) {
+            answers.push({
+              answerId: "general_answer",
+              answer: response.toString(),
+            });
+          }
+          break;
+      }
+
+      if (answers.length > 0) {
+        apiPayload.push({
+          questionId: parseInt(questionId), // Convert string ID to number
+          answer: answers,
+        });
+      }
+    });
+
+    return apiPayload;
+  };
+
+  // API call to save answers
+  const saveAnswersToAPI = async (): Promise<boolean> => {
+    if (!userId) {
+      toast.error("User not authenticated. Please log in again.");
+      return false;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      const apiPayload = transformResponsesForAPI();
+      console.log("Sending survey answers to API:", apiPayload);
+
+      const response = await CustomAxios.post(
+        `/respondent/survey/saveAnswers/${survey.id}/${userId}`,
+        apiPayload
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        toast.success("Survey submitted successfully!");
+        return true;
+      } else {
+        toast.error("Failed to submit survey. Please try again.");
+        return false;
+      }
+    } catch (error: any) {
+      console.log("Error submitting survey:", error);
+
+      if (error.response?.status === 401) {
+        toast.error("Authentication failed. Please log in again.");
+      } else if (error.response?.status === 400) {
+        toast.error("Invalid survey data. Please check your answers.");
+      } else if (error.response?.status === 404) {
+        toast.error("Survey not found.");
+      } else {
+        toast.error("Failed to submit survey. Please try again.");
+      }
+      return false;
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSubmit = async () => {
     if (isViewMode) {
       handleClose();
       return;
     }
 
-    const surveyResponse: SurveyResponse = {
-      id: crypto.randomUUID(),
-      surveyId: survey.id,
-      responses,
-      submittedAt: new Date().toISOString(),
-    };
+    // Validate that we have a userId
+    if (!userId) {
+      toast.error("User not authenticated. Please log in again.");
+      return;
+    }
 
-    onSubmit(surveyResponse);
-    onClose();
+    // Save to API first
+    const success = await saveAnswersToAPI();
 
-    // Reset form
-    setCurrentPage(0);
-    setResponses({});
+    if (success) {
+      // Create the local response object for the parent component
+      const surveyResponse: SurveyResponse = {
+        surveyId: survey.id,
+        responses,
+      };
+
+      console.log("Survey response submitted locally:", surveyResponse);
+
+      // Call the parent's onSubmit handler
+      onSubmit(surveyResponse);
+
+      // Close the modal and reset
+      handleClose();
+    }
+    // If API call fails, don't close the modal so user can retry
   };
 
   const handleClose = () => {
@@ -157,7 +312,7 @@ export function SurveyFillModal({
           <Button
             variant="outline"
             onClick={handlePrevious}
-            disabled={currentPage === 0}
+            disabled={currentPage === 0 || isSubmitting}
             className="flex items-center gap-2"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -165,22 +320,35 @@ export function SurveyFillModal({
           </Button>
 
           <div className="flex gap-2">
-            <Button variant="outline" onClick={handleClose}>
+            <Button
+              variant="outline"
+              onClick={handleClose}
+              disabled={isSubmitting}
+            >
               {isViewMode ? "Close" : "Cancel"}
             </Button>
 
             {currentPage === totalPages - 1 ? (
               <Button
                 onClick={handleSubmit}
-                disabled={!canProceed()}
+                disabled={!canProceed() || isSubmitting}
                 className="bg-teal-600 hover:bg-teal-700 text-white"
               >
-                {isViewMode ? "Close Preview" : "Submit Survey"}
+                {isSubmitting ? (
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Submitting...
+                  </div>
+                ) : isViewMode ? (
+                  "Close Preview"
+                ) : (
+                  "Submit Survey"
+                )}
               </Button>
             ) : (
               <Button
                 onClick={handleNext}
-                disabled={!canProceed()}
+                disabled={!canProceed() || isSubmitting}
                 className="bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2"
               >
                 Next

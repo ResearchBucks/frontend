@@ -86,9 +86,6 @@ export function SurveyStatusDialog({
     await onConfirm(action, reason.trim() || undefined);
   };
 
-  const isReasonRequired = action === "reject";
-  const canSubmit = !isReasonRequired || reason.trim().length > 0;
-
   return (
     <DialogContent className="max-w-md">
       <DialogHeader>
@@ -124,32 +121,6 @@ export function SurveyStatusDialog({
               "This survey will be moved back to draft status and won't be accessible to participants."}
           </AlertDescription>
         </Alert>
-
-        {/* Reason Input */}
-        <div className="space-y-2">
-          <Label htmlFor="reason" className="text-sm font-medium">
-            {isReasonRequired ? "Reason for rejection *" : "Reason (optional)"}
-          </Label>
-          <Textarea
-            id="reason"
-            placeholder={
-              action === "reject"
-                ? "Please provide a reason for rejecting this survey..."
-                : action === "pending"
-                ? "Optional: Add a note about why this survey needs review..."
-                : "Optional: Add a note about this approval..."
-            }
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            rows={3}
-            className="resize-none"
-          />
-          {isReasonRequired && (
-            <p className="text-xs text-gray-500">
-              A reason is required when rejecting a survey.
-            </p>
-          )}
-        </div>
       </div>
 
       <DialogFooter className="gap-2">
@@ -159,7 +130,7 @@ export function SurveyStatusDialog({
         <Button
           className={config.buttonClass}
           onClick={handleConfirm}
-          disabled={!canSubmit || isLoading}
+          disabled={isLoading}
         >
           {isLoading ? (
             <>
