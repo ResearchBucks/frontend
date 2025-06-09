@@ -53,7 +53,7 @@ const approvalStatusConfig = {
 const getApprovalStatus = (
   survey: any
 ): "approved" | "rejected" | "pending" => {
-    console.log("Survey:", survey);
+  console.log("Survey:", survey);
   if (survey.isVerified) return "approved";
   if (survey.isRejected) return "rejected";
   return "pending";
@@ -83,18 +83,6 @@ export const SurveyColumns: ColumnDef<Survey>[] = [
         <p className="text-sm text-gray-600 line-clamp-2">
           {row.original.description}
         </p>
-      </div>
-    ),
-  },
-  {
-    accessorKey: "price",
-    enableSorting: false,
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Price" />
-    ),
-    cell: ({ row }) => (
-      <div className="flex items-center text-green-600 font-medium">
-        <span>Rs.{row.original.price.toFixed(2)}</span>
       </div>
     ),
   },

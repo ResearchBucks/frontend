@@ -23,20 +23,8 @@ interface RespondentUser {
 
 export const RespondentColumns: ColumnDef<RespondentUser>[] = [
   {
-    accessorKey: "name",
-    enableSorting: true,
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
-    ),
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2">
-        <div className="font-medium text-gray-900">{row.original.name}</div>
-      </div>
-    ),
-  },
-  {
     accessorKey: "email",
-    enableSorting: true,
+    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Email" />
     ),
@@ -46,7 +34,7 @@ export const RespondentColumns: ColumnDef<RespondentUser>[] = [
   },
   {
     accessorKey: "role",
-    enableSorting: true,
+    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Role" />
     ),
@@ -61,24 +49,8 @@ export const RespondentColumns: ColumnDef<RespondentUser>[] = [
     ),
   },
   {
-    accessorKey: "status",
-    enableSorting: true,
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
-    ),
-    cell: ({ row }) => (
-      <Badge
-        variant={
-          row.original.status === UserStatus.ACTIVE ? "default" : "destructive"
-        }
-      >
-        {row.original.status === UserStatus.ACTIVE ? "Active" : "Inactive"}
-      </Badge>
-    ),
-  },
-  {
     accessorKey: "totalResponses",
-    enableSorting: true,
+    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Total Responses" />
     ),
@@ -88,54 +60,6 @@ export const RespondentColumns: ColumnDef<RespondentUser>[] = [
         <span className="font-medium">{row.original.totalResponses || 0}</span>
       </div>
     ),
-  },
-  {
-    accessorKey: "lastActivity",
-    enableSorting: true,
-    sortingFn: "datetime",
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Last Activity"
-        ascPlaceholder="Order by Oldest"
-        descPlaceholder="Order by Recent"
-      />
-    ),
-    cell: ({ row }) => {
-      const lastActivity = row.original.lastActivity;
-      if (!lastActivity) {
-        return (
-          <div className="flex items-center gap-1 text-sm text-gray-500">
-            <Clock className="h-4 w-4" />
-            <span>No activity</span>
-          </div>
-        );
-      }
-      return (
-        <div className="flex items-center gap-1 text-sm">
-          <Clock className="h-4 w-4 text-gray-400" />
-          <span>{format(new Date(lastActivity), "PPP")}</span>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "createdAt",
-    enableSorting: true,
-    sortingFn: "datetime",
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Joined Date"
-        ascPlaceholder="Order by Oldest"
-        descPlaceholder="Order by Newest"
-      />
-    ),
-    cell: ({ row }) => {
-      const date = row.original.createdAt;
-      if (!date) return "N/A";
-      return format(new Date(date), "PPP");
-    },
   },
   {
     id: "actions",

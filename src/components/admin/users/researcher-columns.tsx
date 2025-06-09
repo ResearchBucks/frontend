@@ -23,20 +23,8 @@ interface ResearcherUser {
 
 export const ResearcherColumns: ColumnDef<ResearcherUser>[] = [
   {
-    accessorKey: "name",
-    enableSorting: true,
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
-    ),
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2">
-        <div className="font-medium text-gray-900">{row.original.name}</div>
-      </div>
-    ),
-  },
-  {
     accessorKey: "email",
-    enableSorting: true,
+    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Email" />
     ),
@@ -46,7 +34,7 @@ export const ResearcherColumns: ColumnDef<ResearcherUser>[] = [
   },
   {
     accessorKey: "role",
-    enableSorting: true,
+    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Role" />
     ),
@@ -60,25 +48,25 @@ export const ResearcherColumns: ColumnDef<ResearcherUser>[] = [
       </Badge>
     ),
   },
-  {
-    accessorKey: "status",
-    enableSorting: true,
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
-    ),
-    cell: ({ row }) => (
-      <Badge
-        variant={
-          row.original.status === UserStatus.ACTIVE ? "default" : "destructive"
-        }
-      >
-        {row.original.status === UserStatus.ACTIVE ? "Active" : "Inactive"}
-      </Badge>
-    ),
-  },
+  // {
+  //   accessorKey: "status",
+  //   enableSorting: false,
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Status" />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Badge
+  //       variant={
+  //         row.original.status === UserStatus.ACTIVE ? "default" : "destructive"
+  //       }
+  //     >
+  //       {row.original.status === UserStatus.ACTIVE ? "Active" : "Inactive"}
+  //     </Badge>
+  //   ),
+  // },
   {
     accessorKey: "totalSurveys",
-    enableSorting: true,
+    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Total Surveys" />
     ),
@@ -91,7 +79,7 @@ export const ResearcherColumns: ColumnDef<ResearcherUser>[] = [
   },
   {
     accessorKey: "activeSurveys",
-    enableSorting: true,
+    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Active Surveys" />
     ),
@@ -106,7 +94,7 @@ export const ResearcherColumns: ColumnDef<ResearcherUser>[] = [
   },
   {
     accessorKey: "createdAt",
-    enableSorting: true,
+    enableSorting: false,
     sortingFn: "datetime",
     header: ({ column }) => (
       <DataTableColumnHeader

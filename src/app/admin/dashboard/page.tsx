@@ -176,7 +176,7 @@ class DashboardApiService {
     try {
       // Option 1: If you have a specific endpoint
       const response = await CustomAxios.get<ApiResponse<any>>(
-        `/respondent/surveys/participated/${respondentId}`
+        `/respondent/survey/getAllSurveys/${respondentId}`
       );
 
       return {
@@ -190,8 +190,8 @@ class DashboardApiService {
       // Option 2: Fallback - try to get data from other endpoints
       try {
         const [participatedRes, responsesRes] = await Promise.allSettled([
-          CustomAxios.get(`/respondent/surveys/${respondentId}`),
-          CustomAxios.get(`/respondent/responses/${respondentId}`),
+          CustomAxios.get(`/respondent/survey/getAllSurveys/${respondentId}`),
+          CustomAxios.get(`/respondent/responses/getAllSurveys/${respondentId}`),
         ]);
 
         let participated = 0;
