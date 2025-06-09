@@ -13,6 +13,7 @@ RUN yarn install
 
 COPY . .
 
+# Expose the port your dev server listens on (commonly 3000)
 EXPOSE 3000
 
-CMD ["yarn", "start"]
+CMD ["yarn", "dev"]
