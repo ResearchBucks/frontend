@@ -31,6 +31,34 @@ const statusConfig = {
   },
 };
 
+const approvalStatusConfig = {
+  approved: {
+    label: "Approved",
+    variant: "default" as const,
+    className: "bg-green-100 text-green-800 hover:bg-green-200",
+  },
+  rejected: {
+    label: "Rejected",
+    variant: "destructive" as const,
+    className: "bg-red-100 text-red-800 hover:bg-red-200",
+  },
+  pending: {
+    label: "Pending",
+    variant: "secondary" as const,
+    className: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
+  },
+};
+
+// Helper function to determine approval status from API data
+const getApprovalStatus = (
+  survey: any
+): "approved" | "rejected" | "pending" => {
+    console.log("Survey:", survey);
+  if (survey.isVerified) return "approved";
+  if (survey.isRejected) return "rejected";
+  return "pending";
+};
+
 export const SurveyColumns: ColumnDef<Survey>[] = [
   {
     accessorKey: "title",
@@ -59,23 +87,6 @@ export const SurveyColumns: ColumnDef<Survey>[] = [
     ),
   },
   {
-    accessorKey: "status",
-    enableSorting: false,
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
-    ),
-    cell: ({ row }) => {
-      const status = row.original.status;
-      const statusInfo = statusConfig[status as keyof typeof statusConfig];
-
-      return (
-        <Badge variant={statusInfo.variant} className={statusInfo.className}>
-          {statusInfo.label}
-        </Badge>
-      );
-    },
-  },
-  {
     accessorKey: "price",
     enableSorting: false,
     header: ({ column }) => (
@@ -83,10 +94,27 @@ export const SurveyColumns: ColumnDef<Survey>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex items-center text-green-600 font-medium">
-        <DollarSign className="mr-1 h-4 w-4" />
-        <span>{row.original.price.toFixed(2)}</span>
+        <span>Rs.{row.original.price.toFixed(2)}</span>
       </div>
     ),
+  },
+  {
+    id: "approvalStatus",
+    enableSorting: false,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Approval Status" />
+    ),
+    cell: ({ row }) => {
+      // Get the approval status from the original API data
+      const approvalStatus = getApprovalStatus(row.original as any);
+      const statusInfo = approvalStatusConfig[approvalStatus];
+
+      return (
+        <Badge variant={statusInfo.variant} className={statusInfo.className}>
+          {statusInfo.label}
+        </Badge>
+      );
+    },
   },
   {
     accessorKey: "dueDate",
@@ -106,23 +134,19 @@ export const SurveyColumns: ColumnDef<Survey>[] = [
 
       if (!dueDate) return "N/A";
 
-      return (
-        <div className="text-sm">
-          <div className="font-medium">{format(new Date(dueDate), "PPP")}</div>
-          {dueTime && <div className="text-gray-500">{dueTime}</div>}
-        </div>
-      );
+      try {
+        return (
+          <div className="text-sm">
+            <div className="font-medium">
+              {format(new Date(dueDate), "PPP")}
+            </div>
+            {dueTime && <div className="text-gray-500">{dueTime}</div>}
+          </div>
+        );
+      } catch (error) {
+        return <div className="text-sm text-gray-500">Invalid date</div>;
+      }
     },
-  },
-  {
-    accessorKey: "questions",
-    enableSorting: false,
-    header: "Questions",
-    cell: ({ row }) => (
-      <div className="text-sm text-gray-600">
-        {row.original.questions?.length || 0} questions
-      </div>
-    ),
   },
   {
     accessorKey: "createdAt",
@@ -139,7 +163,12 @@ export const SurveyColumns: ColumnDef<Survey>[] = [
     cell: ({ row }) => {
       const date = row.original.createdAt;
       if (!date) return "N/A";
-      return format(new Date(date), "PPP");
+
+      try {
+        return format(new Date(date), "PPP");
+      } catch (error) {
+        return <div className="text-sm text-gray-500">Invalid date</div>;
+      }
     },
   },
   {
