@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -73,7 +72,8 @@ const statusConfig = {
   },
 };
 
-type GetSurveyQuestionsResponse = {
+// Admin response format (array)
+type AdminGetSurveyQuestionsResponse = {
   status: string;
   message: string;
   data: Array<{
@@ -94,6 +94,30 @@ type GetSurveyQuestionsResponse = {
     };
     researcherId: number;
   }>;
+};
+
+// Researcher/Respondent response format (single object)
+type ResearcherGetSurveyQuestionsResponse = {
+  status: string;
+  message: string;
+  data: {
+    id: string;
+    surveyId: number;
+    questions: {
+      [key: string]: {
+        question: string;
+        sinQuestion: string;
+        isRequired: boolean;
+        type: string;
+        options: Array<{
+          id: string;
+          text: string;
+          sinhalaText: string;
+        }>;
+      };
+    };
+    researcherId: number;
+  };
 };
 
 export function SurveyCard({
@@ -125,6 +149,11 @@ export function SurveyCard({
     }
   };
 
+  // Function to check if user is admin
+  const isAdminUser = (): boolean => {
+    return userRole === UserRoles.ADMIN || userRole === UserRoles.SUPER_ADMIN;
+  };
+
   // Function to map API question type to Survey question type
   const mapApiQuestionTypeToSurveyType = (apiType: string): QuestionType => {
     const typeMapping: { [key: string]: QuestionType } = {
@@ -140,9 +169,10 @@ export function SurveyCard({
   };
 
   // Updated function to transform API questions to Survey questions
-  const transformApiQuestionsToQuestions = (apiQuestionsObject: {
-    [key: string]: any;
-  }): Question[] => {
+  const transformApiQuestionsToQuestions = (
+    apiQuestionsObject: { [key: string]: any },
+    isAdmin: boolean = false
+  ): Question[] => {
     const questions: Question[] = [];
 
     // Convert the questions object to an array
@@ -155,7 +185,10 @@ export function SurveyCard({
         sinhalaText: apiQuestion.sinQuestion || "",
         type: mapApiQuestionTypeToSurveyType(apiQuestion.type),
         options: (apiQuestion.options || []).map((option: any) => ({
-          id: option._id || option.id || "",
+          // Handle different option ID fields based on user type
+          id: isAdmin
+            ? option._id || option.id || ""
+            : option.id || option._id || "",
           text: option.text || "",
           sinhalaText: option.sinhalaText || "",
         })),
@@ -177,26 +210,40 @@ export function SurveyCard({
     try {
       setLoadingQuestions(true);
       const endpoint = getApiEndpoint(surveyId);
+      const isAdmin = isAdminUser();
 
-      const response = await CustomAxios.get<GetSurveyQuestionsResponse>(
-        endpoint
-      );
+      const response = await CustomAxios.get(endpoint);
       console.log("API Response:", response.data);
 
-      if (
-        response.status === 200 &&
-        response.data.data &&
-        Array.isArray(response.data.data) &&
-        response.data.data.length > 0
-      ) {
-        // Get the latest questions (last item in array or find by surveyId)
-        const surveyQuestions =
-          response.data.data.find(
-            (item) => item.surveyId.toString() === surveyId
-          ) || response.data.data[response.data.data.length - 1];
+      if (response.status === 200 && response.data.data) {
+        let questionsData = null;
 
-        if (surveyQuestions && surveyQuestions.questions) {
-          return transformApiQuestionsToQuestions(surveyQuestions.questions);
+        if (isAdmin) {
+          // Admin response format (array)
+          const adminResponse =
+            response.data as AdminGetSurveyQuestionsResponse;
+          if (
+            Array.isArray(adminResponse.data) &&
+            adminResponse.data.length > 0
+          ) {
+            // Get the latest questions (last item in array or find by surveyId)
+            questionsData =
+              adminResponse.data.find(
+                (item) => item.surveyId.toString() === surveyId
+              ) || adminResponse.data[adminResponse.data.length - 1];
+          }
+        } else {
+          // Researcher/Respondent response format (single object)
+          const researcherResponse =
+            response.data as ResearcherGetSurveyQuestionsResponse;
+          questionsData = researcherResponse.data;
+        }
+
+        if (questionsData && questionsData.questions) {
+          return transformApiQuestionsToQuestions(
+            questionsData.questions,
+            isAdmin
+          );
         } else {
           toast.error("No questions found for this survey");
           return [];
@@ -397,39 +444,6 @@ export function SurveyCard({
                 <Clock className="mr-2 h-4 w-4 text-gray-400" />
                 <span>Time: {survey.dueTime || "Not specified"}</span>
               </div>
-            </div>
-
-            <div className="flex flex-col items-end justify-center">
-              <div className="flex items-center text-lg font-semibold text-green-600 mb-1">
-                <DollarSign className="mr-1 h-5 w-5" />
-                <span>${survey.price.toFixed(1)}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Progress or additional info bar */}
-          <div className="bg-gray-100 rounded-lg p-3">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-600">Survey Status</span>
-              <span
-                className={`font-medium ${
-                  survey.status === "active"
-                    ? "text-green-600"
-                    : survey.status === "completed"
-                    ? "text-blue-600"
-                    : survey.status === "draft"
-                    ? "text-gray-600"
-                    : "text-red-600"
-                }`}
-              >
-                {survey.status === "active"
-                  ? "Ready to Fill"
-                  : survey.status === "completed"
-                  ? "Completed"
-                  : survey.status === "draft"
-                  ? "In Draft"
-                  : "Expired"}
-              </span>
             </div>
           </div>
         </CardContent>

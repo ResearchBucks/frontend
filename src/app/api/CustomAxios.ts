@@ -60,11 +60,8 @@ CustomAxios.interceptors.response.use(
         errorMessage === "error verifying token: Token is expired")
     ) {
       console.log("Token expired or unauthorized, clearing auth state");
-      store.dispatch(clearAuth());
+      // store.dispatch(clearAuth());
 
-      if (typeof window !== "undefined") {
-        window.location.href = "/";
-      }
       return Promise.reject(
         new Error("Session expired. You have been logged out.")
       );
