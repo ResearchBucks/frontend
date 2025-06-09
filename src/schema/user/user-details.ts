@@ -37,7 +37,7 @@ export const researcherSignupschema = z.object({
   occupation:z.string().min(1),
   email:z.string().email(),
   mobile:z.number().min(10),
-  nic:z.string().min(10),
+  nic:z.string().regex(/^(\d{9}[vV]|\d{12})$/, "NIC must be 9 digits + V or 12 digits"),
   address:z.string().min(1),
 })
 
@@ -48,7 +48,7 @@ export const respondentSignupSchema =z.object({
   lastName:z.string().min(1),
   email:z.string().email(),
   mobile:z.number().min(10),
-  nic:z.string().min(10),
+  nic:z.string().regex(/^(\d{9}[vV]|\d{12})$/, "NIC must be 9 digits + V or 12 digits"),
   address:z.string().min(1),
 })
 
