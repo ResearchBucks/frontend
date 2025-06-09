@@ -8,6 +8,7 @@ import {
   getCoreRowModel,
   useReactTable,
   OnChangeFn,
+  PaginationState,
 } from "@tanstack/react-table";
 
 import {
@@ -40,6 +41,11 @@ interface DataTableProps<TData, TValue> {
   pageSize: number;
   searchBy?: string;
   tableMessage?: string;
+  useFrontendPagination?: boolean;
+  onPaginationChange?: (
+    updater: ((old: PaginationState) => PaginationState) | PaginationState
+  ) => void;
+  onPageSizeChange?: (pageSize: number) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -49,7 +55,10 @@ export function DataTable<TData, TValue>({
   pageIndex,
   pageSize,
   searchBy,
-  tableMessage="No results.",
+  tableMessage = "No results.",
+  onPaginationChange,
+  onPageSizeChange,
+  useFrontendPagination = false, // Default to false for backend pagination
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
@@ -203,6 +212,9 @@ export function DataTable<TData, TValue>({
         pathname={pathname}
         searchParams={searchParams}
         replace={replace}
+        onPaginationChange={onPaginationChange}
+        onPageSizeChange={onPageSizeChange}
+        useFrontendPagination={useFrontendPagination}
       />
     </div>
   );

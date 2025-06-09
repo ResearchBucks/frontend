@@ -1,52 +1,83 @@
-import axios from "axios"; 
+import axios from "axios";
 import { store } from "@/lib/redux/store";
 import { clearAuth } from "@/lib/redux/authSlice";
 
 const CustomAxios = axios.create({
-  baseURL:process.env.NEXT_PUBLIC_API_BASE,
-  timeout:10000,
+  baseURL: process.env.NEXT_PUBLIC_API_BASE,
+  timeout: 100000,
 });
 
-// Add access token to request headers
 CustomAxios.interceptors.request.use(
   (req) => {
-    const accessToken = store.getState().auth.ACCESSTOKEN;
+    const state = store.getState();
+    console.log("Full auth state in interceptor:", state.auth);
+
+    const accessToken = state.auth.ACCESSTOKEN;
+
+    console.log("Request made with access token:", accessToken);
+
     if (accessToken) {
       req.headers["token"] = accessToken;
+      req.headers["Authorization"] = `Bearer ${accessToken}`;
+    } else {
+      console.warn("No access token found in state:", state.auth);
     }
+
     return req;
   },
   (err) => {
+    console.error("Request interceptor error:", err);
     return Promise.reject(err);
   }
 );
 
-// Handle response errors
 CustomAxios.interceptors.response.use(
-  (res) => res,
+  (res) => {
+    console.log("Response received:", res.status, res.config.url);
+    return res;
+  },
   async (err) => {
     const status = err.response ? err.response.status : null;
     const errorMessage = err.response?.data?.details;
 
-    // Token expired or unauthorized
+    console.error("Response error:", {
+      status,
+      errorMessage,
+      url: err.config?.url,
+      data: err.response?.data,
+      code: err.code,
+    });
+
+    if (err.code === "ECONNABORTED") {
+      console.log("Request timed out");
+      return Promise.reject(new Error("Request timed out. Please try again."));
+    }
+
     if (
       status === 401 ||
       status === 419 ||
-      (status === 500 && errorMessage === "error verifying token: Token is expired")
+      (status === 500 &&
+        errorMessage === "error verifying token: Token is expired")
     ) {
-      // Dispatch logout and reject error
+      console.log("Token expired or unauthorized, clearing auth state");
       store.dispatch(clearAuth());
-      return Promise.reject(new Error("Session expired. You have been logged out."));
+
+      if (typeof window !== "undefined") {
+        window.location.href = "/";
+      }
+      return Promise.reject(
+        new Error("Session expired. You have been logged out.")
+      );
     }
 
-    // Forbidden
     if (status === 403) {
+      console.log("Forbidden access");
       alert("Forbidden access");
       return Promise.reject(err);
     }
 
-    // Bad request or not found
     if (status === 400 || status === 404 || status === 409 || status === 500) {
+      console.log("Client or server error:", status);
       return Promise.reject(err);
     }
 
