@@ -86,16 +86,18 @@ export interface Survey extends SurveyForm {
   dueDate: string;
   dueTime: string;
   price: number;
+  isVerified?: boolean;
+  isRejected?: boolean;
   imageUrl?: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface SurveyResponse {
-  id: string;
+  // id: string;
   surveyId: string;
   responses: Record<string, any>;
-  submittedAt: string;
+  // submittedAt: string;
 }
 
 export interface QuestionBuilderProps {
