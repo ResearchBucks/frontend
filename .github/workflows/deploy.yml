@@ -67,6 +67,6 @@ jobs:
             echo "Removing existing container (if exists)..."
             docker rm research-bucks-fe 2>/dev/null || echo "No existing container to remove"
 
-            docker run -d -p 80:3000 --name research-bucks-fe $IMAGE_NAME:latest
+            docker run -d -e NEXT_PUBLIC_API_BASE=http://20.121.120.231:8060/ -p 80:3000 --name research-bucks-fe $IMAGE_NAME:latest
 
 
