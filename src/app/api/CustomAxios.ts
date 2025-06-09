@@ -4,7 +4,7 @@ import { clearAuth } from "@/lib/redux/authSlice";
 
 const CustomAxios = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE,
-  timeout: 100000, 
+  timeout: 100000,
 });
 
 CustomAxios.interceptors.request.use(
@@ -61,6 +61,10 @@ CustomAxios.interceptors.response.use(
     ) {
       console.log("Token expired or unauthorized, clearing auth state");
       store.dispatch(clearAuth());
+
+      if (typeof window !== "undefined") {
+        window.location.href = "/";
+      }
       return Promise.reject(
         new Error("Session expired. You have been logged out.")
       );

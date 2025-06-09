@@ -150,7 +150,7 @@ export default function UserManagementPage() {
         setAdminPagination(pagination);
       }
     } catch (error: any) {
-      console.error("Error fetching admins:", error);
+      console.log("Error fetching admins:", error);
       setAdminError("Failed to fetch admin users");
       toast.error("Failed to load admin users");
     } finally {
@@ -179,7 +179,7 @@ export default function UserManagementPage() {
         setResearcherPagination(pagination);
       }
     } catch (error: any) {
-      console.error("Error fetching researchers:", error);
+      console.log("Error fetching researchers:", error);
       setResearcherError("Failed to fetch researcher users");
       toast.error("Failed to load researcher users");
     } finally {
@@ -208,7 +208,7 @@ export default function UserManagementPage() {
         setRespondentPagination(pagination);
       }
     } catch (error: any) {
-      console.error("Error fetching respondents:", error);
+      console.log("Error fetching respondents:", error);
       setRespondentError("Failed to fetch respondent users");
       toast.error("Failed to load respondent users");
     } finally {

@@ -127,7 +127,7 @@ export default function SurveysPage() {
         toast.error("Failed to fetch surveys");
       }
     } catch (error: any) {
-      console.error("Error fetching surveys:", error);
+      console.log("Error fetching surveys:", error);
 
       if (error.response?.status === 401) {
         setError("Authentication failed. Please log in again.");
