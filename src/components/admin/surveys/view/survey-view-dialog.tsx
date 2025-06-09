@@ -29,6 +29,8 @@ import { Survey, Question } from "@/types/surveys/surveys";
 import { format } from "date-fns";
 import CustomAxios from "@/app/api/CustomAxios";
 import { toast } from "sonner";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { UserRoles } from "@/enum/user";
 
 interface SurveyViewDialogProps {
   survey: Survey;
@@ -71,7 +73,7 @@ const questionTypeIcons = {
 type GetSurveyQuestionsResponse = {
   status: string;
   message: string;
-  data: {
+  data: Array<{
     id: string;
     surveyId: number;
     questions: {
@@ -81,20 +83,34 @@ type GetSurveyQuestionsResponse = {
         isRequired: boolean;
         type: string;
         options: Array<{
-          id: string;
+          _id: string;
           text: string;
           sinhalaText: string;
         }>;
       };
     };
     researcherId: number;
-  };
+  }>;
 };
 
 export function SurveyViewDialog({ survey, onClose }: SurveyViewDialogProps) {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const statusInfo = statusConfig[survey.status as keyof typeof statusConfig];
+
+  // Get user role from Redux store
+  const userRole = useAppSelector((state: any) => state.auth.userRole);
+
+  // Function to get the correct API endpoint based on user role
+  const getApiEndpoint = (surveyId: string): string => {
+    switch (userRole) {
+      case UserRoles.ADMIN:
+      case UserRoles.SUPER_ADMIN:
+        return `/admin/survey/getSurveyQuestions/${surveyId}`;
+      default:
+        return `researcher/survey/getSurveyQuestions/${surveyId}`;
+    }
+  };
 
   // Function to map API question type to Survey question type
   const mapApiQuestionTypeToSurveyType = (
@@ -127,7 +143,7 @@ export function SurveyViewDialog({ survey, onClose }: SurveyViewDialogProps) {
         sinhalaText: apiQuestion.sinQuestion || "",
         type: mapApiQuestionTypeToSurveyType(apiQuestion.type),
         options: (apiQuestion.options || []).map((option: any) => ({
-          id: option.id || "",
+          id: option._id || option.id || "",
           text: option.text || "",
           sinhalaText: option.sinhalaText || "",
         })),
@@ -145,35 +161,58 @@ export function SurveyViewDialog({ survey, onClose }: SurveyViewDialogProps) {
   const fetchSurveyQuestions = async () => {
     try {
       setLoading(true);
+      const endpoint = getApiEndpoint(survey.id);
+
       const response = await CustomAxios.get<GetSurveyQuestionsResponse>(
-        `researcher/survey/getSurveyQuestions/${survey.id}`
+        endpoint
       );
 
       if (
         response.status === 200 &&
         response.data.data &&
-        response.data.data.questions
+        Array.isArray(response.data.data) &&
+        response.data.data.length > 0
       ) {
-        const transformedQuestions = transformApiQuestionsToQuestions(
-          response.data.data.questions
-        );
-        setQuestions(transformedQuestions);
+        // Get the latest questions (last item in array or find by surveyId)
+        const surveyQuestions =
+          response.data.data.find(
+            (item) => item.surveyId.toString() === survey.id
+          ) || response.data.data[response.data.data.length - 1];
+
+        if (surveyQuestions && surveyQuestions.questions) {
+          const transformedQuestions = transformApiQuestionsToQuestions(
+            surveyQuestions.questions
+          );
+          setQuestions(transformedQuestions);
+        } else {
+          toast.error("No questions found for this survey");
+        }
       } else {
         toast.error("Failed to fetch survey questions");
       }
     } catch (error: any) {
-      console.error("Error fetching survey questions:", error);
-      toast.error("Failed to load survey questions");
+      console.log("Error fetching survey questions:", error);
+
+      // Enhanced error handling
+      if (error.response?.status === 401) {
+        toast.error("Authentication failed. Please log in again.");
+      } else if (error.response?.status === 403) {
+        toast.error("Access denied. Insufficient permissions.");
+      } else if (error.response?.status === 404) {
+        toast.error("Survey questions not found.");
+      } else {
+        toast.error("Failed to load survey questions");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (survey.id) {
+    if (survey.id && userRole) {
       fetchSurveyQuestions();
     }
-  }, [survey.id]);
+  }, [survey.id, userRole]);
 
   const renderQuestionOptions = (question: Question) => {
     if (!question.options || question.options.length === 0) {
@@ -254,7 +293,9 @@ export function SurveyViewDialog({ survey, onClose }: SurveyViewDialogProps) {
                 <Clock className="h-4 w-4 text-gray-400" />
                 <div>
                   <div className="font-medium">Due Time</div>
-                  <div className="text-gray-600">{survey.dueTime}</div>
+                  <div className="text-gray-600">
+                    {survey.dueTime || "Not specified"}
+                  </div>
                 </div>
               </div>
 

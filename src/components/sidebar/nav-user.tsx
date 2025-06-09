@@ -70,7 +70,7 @@ export function NavUser({
         router.push("/");
       }
     } catch (error) {
-      console.error("Logout error:", error);
+      console.log("Logout error:", error);
 
       dispatch(clearAuth());
 

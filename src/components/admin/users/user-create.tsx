@@ -149,7 +149,7 @@ export function CreateUserDialog({
         handleClose();
       }
     } catch (error: any) {
-      console.error("Error creating user:", error);
+      console.log("Error creating user:", error);
 
       if (error.response?.status === 409) {
         setErrors({ email: "User with this email already exists" });
