@@ -30,7 +30,7 @@ jobs:
 
       - name: Create .env file dynamically
         run: |
-          echo "NEXT_PUBLIC_API_BASE=http://${{ secrets.AZURE_VM_IP }}:8060/" > .env
+          echo "NEXT_PUBLIC_API_BASE= http://20.121.120.231:8060/" > .env
           cat .env
   
       - name: Build Docker image
