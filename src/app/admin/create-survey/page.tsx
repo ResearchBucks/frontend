@@ -136,7 +136,7 @@ export default function CreateSurveyPage() {
         toast.error("Failed to create survey. Please try again.");
       }
     } catch (error: any) {
-      console.error("Error creating survey:", error);
+      console.log("Error creating survey:", error);
 
       if (error.response?.status === 401) {
         toast.error("Authentication failed. Please log in again.");
