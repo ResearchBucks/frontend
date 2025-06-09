@@ -10,47 +10,24 @@ import { AdminUser } from "@/types/user/users";
 
 export const AdminColumns: ColumnDef<AdminUser>[] = [
   {
-    accessorKey: "fistName",
-    enableSorting: true,
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="First Name" />
-    ),
-  },
-  {
     accessorKey: "lastName",
-    enableSorting: true,
+    enableSorting: false,
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Last Name" />
+      <DataTableColumnHeader column={column} title="Name" />
     ),
   },
   {
     accessorKey: "email",
-    enableSorting: true,
+    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Email" />
     ),
   },
   {
     accessorKey: "role",
-    enableSorting: true,
+    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Role" />
-    ),
-  },
-  {
-    accessorKey: "status",
-    enableSorting: true,
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
-    ),
-    cell: ({ row }) => (
-      <Badge
-        variant={
-          row.original.status === UserStatus.ACTIVE ? "default" : "destructive"
-        }
-      >
-        {row.original.status === UserStatus.ACTIVE ? "Active" : "Inactive"}
-      </Badge>
     ),
   },
   {

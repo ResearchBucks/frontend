@@ -265,12 +265,12 @@ export function SurveyViewDialog({ survey, onClose }: SurveyViewDialogProps) {
                 <CardTitle className="text-lg text-gray-900 mb-2">
                   {survey.title}
                 </CardTitle>
-                <Badge
+                {/* <Badge
                   variant={statusInfo.variant}
                   className={statusInfo.className}
                 >
                   {statusInfo.label}
-                </Badge>
+                </Badge> */}
               </div>
             </div>
           </CardHeader>
@@ -299,7 +299,7 @@ export function SurveyViewDialog({ survey, onClose }: SurveyViewDialogProps) {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 text-sm">
+              {/* <div className="flex items-center gap-2 text-sm">
                 <DollarSign className="h-4 w-4 text-green-600" />
                 <div>
                   <div className="font-medium">Price</div>
@@ -307,7 +307,7 @@ export function SurveyViewDialog({ survey, onClose }: SurveyViewDialogProps) {
                     ${survey.price.toFixed(2)}
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="flex items-center gap-2 text-sm">
                 <FileText className="h-4 w-4 text-gray-400" />
