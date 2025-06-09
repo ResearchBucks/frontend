@@ -2,14 +2,14 @@ import SurveyCard from "@/components/landing/surveyCard";
 
 export default function LandingSurveyPage() {
   return (
-    <div className="flex flex-col justify-evenly md:px-6 max-w-screen items-center w-full">
-      <h1 className="font-bold text-3xl text-center">Earn with paid surveys in 3 steps</h1>
-      <div className="w-full flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-screen-lg">
+    <div className="flex flex-col justify-evenly md:px-6 max-w-screen-xl items-center w-full ">
+      <h1 className="font-extrabold text-4xl md:text-5xl text-center mb-12 text-gray-900 drop-shadow-lg">
+        Earn with Paid Surveys in 3 Simple Steps
+      </h1>
+      <div className="w-full flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-3 gap-10 max-w-screen-lg">
         <SurveyCard surveyCardName="signup" />
         <SurveyCard surveyCardName="answer" />
-        <div className="flex justify-center sm:col-span-2 md:col-span-2 lg:col-span-1">
-          <SurveyCard surveyCardName="getpaid" />
-        </div>
+        <SurveyCard surveyCardName="getpaid" />
       </div>
     </div>
   );
