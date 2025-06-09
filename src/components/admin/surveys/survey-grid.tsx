@@ -57,7 +57,7 @@ export function SurveyGrid({
         toast.error("Failed to delete survey");
       }
     } catch (error: any) {
-      console.error("Error deleting survey:", error);
+      console.log("Error deleting survey:", error);
 
       if (error.response?.status === 401) {
         toast.error("Authentication failed. Please log in again.");

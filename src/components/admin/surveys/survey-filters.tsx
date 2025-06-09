@@ -48,20 +48,9 @@ export function SurveyFilters({ totalSurveys }: SurveyFiltersProps) {
     router.push(`?${params.toString()}`);
   };
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    updateSearchParams(query, status);
-  };
-
   const handleStatusChange = (newStatus: string) => {
     setStatus(newStatus);
     updateSearchParams(query, newStatus);
-  };
-
-  const clearFilters = () => {
-    setQuery("");
-    setStatus("all");
-    router.push(window.location.pathname);
   };
 
   const hasActiveFilters =
@@ -69,23 +58,8 @@ export function SurveyFilters({ totalSurveys }: SurveyFiltersProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row gap-4">
-        <form onSubmit={handleSearch} className="flex-1 flex gap-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input
-              placeholder="Search surveys by title or description..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-          <Button type="submit" variant="outline">
-            Search
-          </Button>
-        </form>
-
-        <div className="flex gap-2">
+      <div className="flex justify-end">
+        <div className="flex justify-end gap-2">
           <Select value={status} onValueChange={handleStatusChange}>
             <SelectTrigger className="w-[180px]">
               <Filter className="mr-2 h-4 w-4" />
@@ -99,17 +73,6 @@ export function SurveyFilters({ totalSurveys }: SurveyFiltersProps) {
               <SelectItem value="expired">Expired</SelectItem>
             </SelectContent>
           </Select>
-
-          {hasActiveFilters && (
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={clearFilters}
-              title="Clear filters"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          )}
         </div>
       </div>
 

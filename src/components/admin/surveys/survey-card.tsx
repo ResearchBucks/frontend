@@ -39,6 +39,8 @@ import {
 import { SurveyFillModal } from "./fill/survey-fill-model";
 import CustomAxios from "@/app/api/CustomAxios";
 import { toast } from "sonner";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { UserRoles } from "@/enum/user";
 
 const statusConfig = {
   active: {
@@ -74,7 +76,7 @@ const statusConfig = {
 type GetSurveyQuestionsResponse = {
   status: string;
   message: string;
-  data: {
+  data: Array<{
     id: string;
     surveyId: number;
     questions: {
@@ -84,14 +86,14 @@ type GetSurveyQuestionsResponse = {
         isRequired: boolean;
         type: string;
         options: Array<{
-          id: string;
+          _id: string;
           text: string;
           sinhalaText: string;
         }>;
       };
     };
     researcherId: number;
-  };
+  }>;
 };
 
 export function SurveyCard({
@@ -108,6 +110,20 @@ export function SurveyCard({
   );
   const [loadingQuestions, setLoadingQuestions] = useState(false);
   const statusInfo = statusConfig[survey.status];
+
+  // Get user role from Redux store
+  const userRole = useAppSelector((state: any) => state.auth.userRole);
+
+  // Function to get the correct API endpoint based on user role
+  const getApiEndpoint = (surveyId: string): string => {
+    switch (userRole) {
+      case UserRoles.ADMIN:
+      case UserRoles.SUPER_ADMIN:
+        return `/admin/survey/getSurveyQuestions/${surveyId}`;
+      default:
+        return `researcher/survey/getSurveyQuestions/${surveyId}`;
+    }
+  };
 
   // Function to map API question type to Survey question type
   const mapApiQuestionTypeToSurveyType = (apiType: string): QuestionType => {
@@ -139,7 +155,7 @@ export function SurveyCard({
         sinhalaText: apiQuestion.sinQuestion || "",
         type: mapApiQuestionTypeToSurveyType(apiQuestion.type),
         options: (apiQuestion.options || []).map((option: any) => ({
-          id: option.id || "",
+          id: option._id || option.id || "",
           text: option.text || "",
           sinhalaText: option.sinhalaText || "",
         })),
@@ -160,27 +176,43 @@ export function SurveyCard({
   ): Promise<Question[]> => {
     try {
       setLoadingQuestions(true);
+      const endpoint = getApiEndpoint(surveyId);
 
       const response = await CustomAxios.get<GetSurveyQuestionsResponse>(
-        `researcher/survey/getSurveyQuestions/${surveyId}`
+        endpoint
       );
       console.log("API Response:", response.data);
 
       if (
         response.status === 200 &&
         response.data.data &&
-        response.data.data.questions
+        Array.isArray(response.data.data) &&
+        response.data.data.length > 0
       ) {
-        return transformApiQuestionsToQuestions(response.data.data.questions);
+        // Get the latest questions (last item in array or find by surveyId)
+        const surveyQuestions =
+          response.data.data.find(
+            (item) => item.surveyId.toString() === surveyId
+          ) || response.data.data[response.data.data.length - 1];
+
+        if (surveyQuestions && surveyQuestions.questions) {
+          return transformApiQuestionsToQuestions(surveyQuestions.questions);
+        } else {
+          toast.error("No questions found for this survey");
+          return [];
+        }
       } else {
         toast.error("Failed to fetch survey questions");
         return [];
       }
     } catch (error: any) {
-      console.error("Error fetching survey questions:", error);
+      console.log("Error fetching survey questions:", error);
 
+      // Enhanced error handling
       if (error.response?.status === 401) {
         toast.error("Authentication failed. Please log in again.");
+      } else if (error.response?.status === 403) {
+        toast.error("Access denied. Insufficient permissions.");
       } else if (error.response?.status === 404) {
         toast.error("Survey questions not found.");
       } else {
@@ -212,7 +244,7 @@ export function SurveyCard({
       setIsViewMode(true);
       setIsModalOpen(true);
     } catch (error) {
-      console.error("Error loading survey for view:", error);
+      console.log("Error loading survey for view:", error);
       toast.error("Failed to load survey details. Please try again.");
     }
 
@@ -253,7 +285,7 @@ export function SurveyCard({
       setIsViewMode(false);
       setIsModalOpen(true);
     } catch (error) {
-      console.error("Error preparing survey:", error);
+      console.log("Error preparing survey:", error);
       toast.error("Failed to load survey. Please try again.");
     }
   };
@@ -293,12 +325,6 @@ export function SurveyCard({
                     {survey.title}
                   </CardTitle>
                 </div>
-                <Badge
-                  variant={statusInfo.variant}
-                  className={`${statusInfo.className} text-xs`}
-                >
-                  {statusInfo.label}
-                </Badge>
               </div>
             </div>
 
@@ -369,7 +395,7 @@ export function SurveyCard({
               </div>
               <div className="flex items-center text-sm text-gray-500">
                 <Clock className="mr-2 h-4 w-4 text-gray-400" />
-                <span>Time: {survey.dueTime}</span>
+                <span>Time: {survey.dueTime || "Not specified"}</span>
               </div>
             </div>
 
@@ -377,13 +403,6 @@ export function SurveyCard({
               <div className="flex items-center text-lg font-semibold text-green-600 mb-1">
                 <DollarSign className="mr-1 h-5 w-5" />
                 <span>${survey.price.toFixed(1)}</span>
-              </div>
-              <div className="flex items-center text-xs text-gray-500">
-                <FileText className="mr-1 h-3 w-3" />
-                <span>
-                  {survey.questions.length} question
-                  {survey.questions.length !== 1 ? "s" : ""}
-                </span>
               </div>
             </div>
           </div>
@@ -417,27 +436,6 @@ export function SurveyCard({
 
         <CardFooter className="pt-0 pb-4">
           <div className="w-full space-y-2">
-            <Button
-              onClick={handleFillSurvey}
-              className="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium"
-              disabled={survey.status !== "active" || loadingQuestions}
-            >
-              {loadingQuestions ? (
-                <div className="flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Loading Questions...
-                </div>
-              ) : survey.status === "active" ? (
-                "Fill Survey"
-              ) : survey.status === "completed" ? (
-                "Already Completed"
-              ) : survey.status === "draft" ? (
-                "Survey in Draft"
-              ) : (
-                "Survey Expired"
-              )}
-            </Button>
-
             <Button
               onClick={handleView}
               variant="outline"

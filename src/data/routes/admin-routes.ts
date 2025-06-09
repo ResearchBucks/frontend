@@ -47,29 +47,25 @@ const navMain: IMenueItem[] = [
     title: "Create Survey",
     url: "/admin/create-survey",
     icon: NotebookPen,
-    onlyForRoles: [UserRoles.RESEARCHER, UserRoles.SUPER_ADMIN],
+    onlyForRoles: [UserRoles.RESEARCHER],
   },
   {
     title: "Leaderboard",
     url: "/admin/leaderboard",
     icon: ChartColumn,
-    onlyForRoles: [UserRoles.RESPONDENT, UserRoles.SUPER_ADMIN],
+    onlyForRoles: [UserRoles.RESPONDENT],
   },
   {
     title: "My Surveys",
     url: "/admin/my-surveys",
     icon: NotepadText,
-    onlyForRoles: [
-      UserRoles.RESEARCHER,
-      UserRoles.RESPONDENT,
-      UserRoles.SUPER_ADMIN,
-    ],
+    onlyForRoles: [UserRoles.RESEARCHER, UserRoles.RESPONDENT],
   },
   {
     title: "My Rewards",
     url: "/admin/my-rewards",
     icon: Medal,
-    onlyForRoles: [UserRoles.RESPONDENT, UserRoles.SUPER_ADMIN],
+    onlyForRoles: [UserRoles.RESPONDENT],
   },
   {
     title: "Users",

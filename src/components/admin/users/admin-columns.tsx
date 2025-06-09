@@ -3,18 +3,24 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
-import { IUser } from "@/types/user/users";
 import { DataTableColumnHeader } from "@/components/data-table/datatable-header";
 import ActionsDropDown from "./actions-dropdown";
 import { UserRoles, UserStatus } from "@/enum/user";
-import { capitalizeFirstLetter } from "@/lib/format";
+import { AdminUser } from "@/types/user/users";
 
-export const AdminColumns: ColumnDef<IUser>[] = [
+export const AdminColumns: ColumnDef<AdminUser>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "fistName",
     enableSorting: true,
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
+      <DataTableColumnHeader column={column} title="First Name" />
+    ),
+  },
+  {
+    accessorKey: "lastName",
+    enableSorting: true,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Last Name" />
     ),
   },
   {
@@ -29,24 +35,6 @@ export const AdminColumns: ColumnDef<IUser>[] = [
     enableSorting: true,
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Role" />
-    ),
-    cell: ({ row }) => (
-      <Badge
-        variant={(() => {
-          switch (row.original.role) {
-            case UserRoles.ADMIN:
-              return "secondary";
-            case UserRoles.OPERATOR:
-              return "default";
-            case UserRoles.SCANNER:
-              return "outline";
-            default:
-              return "secondary";
-          }
-        })()}
-      >
-        {capitalizeFirstLetter(row.original.role, true)}
-      </Badge>
     ),
   },
   {
@@ -66,24 +54,6 @@ export const AdminColumns: ColumnDef<IUser>[] = [
     ),
   },
   {
-    accessorKey: "createdAt",
-    enableSorting: true,
-    sortingFn: "datetime",
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Registered Date"
-        ascPlaceholder="Order by Oldest"
-        descPlaceholder="Order by Newest"
-      />
-    ),
-    cell: ({ row }) => {
-      const date = row.original.createdAt;
-      if (!date) return "N/A";
-      return format(new Date(date), "PPP");
-    },
-  },
-  {
     id: "actions",
     enableSorting: false,
     cell: ({ row }) => {
@@ -94,5 +64,5 @@ export const AdminColumns: ColumnDef<IUser>[] = [
   },
 ];
 
-export type TableColumnKeys = keyof IUser;
-export type TableColumnValues = IUser[TableColumnKeys];
+export type TableColumnKeys = keyof AdminUser;
+export type TableColumnValues = AdminUser[TableColumnKeys];
