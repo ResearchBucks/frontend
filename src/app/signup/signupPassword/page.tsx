@@ -43,9 +43,9 @@ export default function SignUpPassword() {
             //enter the naviagtion to log into the syste succesfully
         }
         
-    }catch(err){
+    }catch(err:any){
         console.log(err)
-         toast.error("Error Occured in password submmision! try again!");
+         toast.error(err?.response?.data?.message || "Error Occured in password submmision! try again!");
     }
   };
 
